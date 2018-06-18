@@ -1,4 +1,5 @@
 hs.hotkey.bind("0", "f19", function()
+	
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
@@ -10,9 +11,6 @@ hs.hotkey.bind("0", "f19", function()
     f.h = max.h/2
     win:setFrame(f)
   end)
-
-
-
 
 
 ------------------
@@ -77,12 +75,12 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f16", function()
 	tell application "/Applications/Google Chrome.app"
     make new window
     activate
-    open location "https://www.vocabulary.com/dictionary/" & selectedText
+    open location "https://translate.google.com/#en/zh-CN/" & selectedText
 end tell
 delay 1
 tell application "Google Chrome"
 		activate
-		open location "https://translate.google.com/#en/zh-CN/"
+		open location "https://www.vocabulary.com/dictionary/"
 		tell application "System Events"
 			delay 1
 			keystroke selectedText
