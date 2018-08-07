@@ -1,3 +1,17 @@
+------------------
+-- screen shot --
+------------------
+hs.hotkey.bind({"cmd"}, "escape", function()
+	
+	hs.eventtap.keyStroke("cmd", "v")
+	hs.eventtap.keyStroke({"ctrl","cmd","shift"}, "4")
+
+  end)
+
+------------------
+-- mobile view --
+------------------
+
 hs.hotkey.bind("0", "f19", function()
 	
     local win = hs.window.focusedWindow()
