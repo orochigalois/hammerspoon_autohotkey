@@ -3,7 +3,6 @@
 ------------------
 hs.hotkey.bind({"cmd"}, "escape", function()
 	
-	hs.eventtap.keyStroke("cmd", "v")
 	hs.eventtap.keyStroke({"ctrl","cmd","shift"}, "4")
 
   end)
