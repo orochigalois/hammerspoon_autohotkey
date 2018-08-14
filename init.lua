@@ -1,4 +1,59 @@
 ------------------
+-- layout the top 4 windows equally --
+------------------
+function windowFuzzySearch()
+	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+	-- windows = hs.window.orderedWindows()
+	for i,win in pairs(windows) do
+		local f = win:frame()
+		if i == 1 then
+			f.x = 0
+			f.y = 0
+			f.w = 1280
+			f.h = 720-40
+		end
+
+		if i == 2 then
+			f.x = 1280
+			f.y = 0
+			f.w = 1280
+			f.h = 720-40
+		end
+
+		if i == 3 then
+			f.x = 0
+			f.y = 720-16
+			f.w = 1280
+			f.h = 720-40
+		end
+		if i == 4 then
+			f.x = 1280
+			f.y = 720-16
+			f.w = 1280
+			f.h = 720-40
+		end
+		
+		
+		win:setFrame(f)
+		print(i)
+	end
+	
+end
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "J", function()
+	windowFuzzySearch()
+end)
+
+
+
+
+
+
+
+
+
+
+------------------
 -- screen shot --
 ------------------
 hs.hotkey.bind({"cmd"}, "escape", function()
