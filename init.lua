@@ -89,36 +89,6 @@ hs.hotkey.bind("0", 50, function()--50 is the ` key
 end)
 
 
-------------------
--- layout the top 1 windows equally --
-------------------
-function windowOne()
-	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-	-- windows = hs.window.orderedWindows()
-	for i,win in pairs(windows) do
-		local f = win:frame()
-		local screen = win:screen()
-    	local max = screen:frame()
-		if i == 1 then
-			f.x = 0
-			f.y = 0
-			f.w = max.w
-			f.h = max.h
-		end
-
-
-		
-		
-		win:setFrame(f)
-		print(i)
-	end
-	
-end
-
-
-hs.hotkey.bind({"ctrl"}, "escape", function()--145 is the f1 function key
-	windowOne()
-end)
 
 
 
