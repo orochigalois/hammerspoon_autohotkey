@@ -1,7 +1,7 @@
 ------------------
 -- layout the top 4 windows equally --
 ------------------
-function windowFuzzySearch()
+function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
 	for i,win in pairs(windows) do
@@ -44,7 +44,80 @@ function windowFuzzySearch()
 end
 
 hs.hotkey.bind("0", "escape", function()
-	windowFuzzySearch()
+	windowFour()
+end)
+
+
+------------------
+-- layout the top 2 windows equally --
+------------------
+function windowTwo()
+	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+	-- windows = hs.window.orderedWindows()
+	for i,win in pairs(windows) do
+		local f = win:frame()
+		local screen = win:screen()
+    	local max = screen:frame()
+		if i == 1 then
+			f.x = 0
+			f.y = 0
+			f.w = 1280
+			f.h = max.h
+		end
+
+		
+
+		if i == 2 then
+			f.x = 1280
+			f.y = 0
+			f.w = 1280
+			f.h = max.h
+		end
+
+		
+		
+		
+		win:setFrame(f)
+		print(i)
+	end
+	
+end
+
+
+hs.hotkey.bind("0", 50, function()--50 is the ` key
+	windowTwo()
+end)
+
+
+------------------
+-- layout the top 1 windows equally --
+------------------
+function windowOne()
+	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+	-- windows = hs.window.orderedWindows()
+	for i,win in pairs(windows) do
+		local f = win:frame()
+		local screen = win:screen()
+    	local max = screen:frame()
+		if i == 1 then
+			f.x = 0
+			f.y = 0
+			f.w = max.w
+			f.h = max.h
+		end
+
+
+		
+		
+		win:setFrame(f)
+		print(i)
+	end
+	
+end
+
+
+hs.hotkey.bind({"ctrl"}, "escape", function()--145 is the f1 function key
+	windowOne()
 end)
 
 
