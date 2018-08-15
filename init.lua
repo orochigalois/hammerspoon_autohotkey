@@ -40,11 +40,9 @@ function windowFuzzySearch()
 	
 end
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "J", function()
+hs.hotkey.bind("0", "escape", function()
 	windowFuzzySearch()
 end)
-
-
 
 
 
