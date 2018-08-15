@@ -13,19 +13,22 @@ function windowFuzzySearch()
 			f.h = 720-40
 		end
 
+		
+
 		if i == 2 then
+			f.x = 0
+			f.y = 720-16
+			f.w = 1280
+			f.h = 720-40
+		end
+
+		if i == 3 then
 			f.x = 1280
 			f.y = 0
 			f.w = 1280
 			f.h = 720-40
 		end
 
-		if i == 3 then
-			f.x = 0
-			f.y = 720-16
-			f.w = 1280
-			f.h = 720-40
-		end
 		if i == 4 then
 			f.x = 1280
 			f.y = 720-16
