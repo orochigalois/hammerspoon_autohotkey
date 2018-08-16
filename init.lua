@@ -1,6 +1,117 @@
-------------------
--- layout the top 4 windows equally --
-------------------
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————20 mins timer
+-- http://github.com/dbmrq/dotfiles/
+
+-- Cherry tomato (a tiny Pomodoro)
+
+
+-----------------------------
+--  Customization Options  --
+-----------------------------
+
+-- Set these variables to whatever you prefer
+
+-- The keyboard shortcut to start the timer is composed of the `super`
+-- modifiers + the `hotkey` value.
+
+local super = {"ctrl", "alt", "cmd"}
+local hotkey = "C"
+
+local duration = 20 -- timer duration in minutes
+
+-- set this to true to always show the menu bar item
+-- (making the keyboard shortcut superfluous):
+local alwaysShow = true
+
+
+-------------------------------------------------------------------
+--  Don't mess with this part unless you know what you're doing  --
+-------------------------------------------------------------------
+
+-- Setup {{{1
+
+local updateTimer, updateMenu, start, pause, reset, stop
+
+local menu
+local isActive = false
+
+local timeLeft = duration * 60
+
+local timer = hs.timer.new(1, function() updateTimer() end)
+
+-- }}}1
+
+updateTimer = function()-- {{{1
+    if not isActive then return end
+    timeLeft = timeLeft - 1
+    updateMenu()
+    if timeLeft <= 0 then
+        stop()
+		
+		script = [[
+					say "Time up, Get up, Alex"
+				]]
+		ok,result = hs.applescript(script)
+		hs.alert.show("Time Up🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺\nTime Up🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺\nTime Up🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺\nTime Up🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺\n")
+		
+    end
+end-- }}}1
+
+updateMenu = function()-- {{{1
+    if not menu then
+        menu = hs.menubar.new()
+        menu:setTooltip("Cherry")
+    end
+    menu:returnToMenuBar()
+    local minutes = math.floor(timeLeft / 60)
+    local seconds = timeLeft - (minutes * 60)
+    local string = string.format("%02d:%02d 🍒", minutes, seconds)
+    menu:setTitle(string)
+
+    local items = {
+            {title = "Stop", fn = function() stop() end},
+        }
+    if isActive then
+        table.insert(items, 1, {title = "Pause", fn = function() pause() end})
+    else
+        table.insert(items, 1, {title = "Start", fn = function() start() end})
+    end
+    menu:setMenu(items)
+end-- }}}1
+
+start = function()-- {{{1
+    if isActive then return end
+    timer:start()
+    isActive = true
+end-- }}}1
+
+pause = function()-- {{{1
+    if not isActive then return end
+    timer:stop()
+    isActive = false
+    updateMenu()
+end-- }}}1
+
+stop = function()-- {{{1
+    pause()
+    timeLeft = duration * 60
+    if not alwaysShow then
+        menu:delete()
+    else
+        updateMenu()
+    end
+end-- }}}1
+
+reset = function()-- {{{1
+    timeLeft = duration * 60
+    updateMenu()
+end-- }}}1
+
+hs.hotkey.bind(super, hotkey, function() start() end)
+
+if alwaysShow then updateMenu() end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 4 windows equally
+
 function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
@@ -49,9 +160,7 @@ eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseD
 end)
 eventtapMiddleMouseDown:start()
 
-------------------
--- layout the top 2 windows equally --
-------------------
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 2 windows equally
 function windowTwo()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
@@ -85,32 +194,22 @@ function windowTwo()
 end
 
 
-hs.hotkey.bind("0", 50, function()--50 is the ` key
+hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
 	windowTwo()
 end)
 
 
 
 
-
-
-
-
-
-
-------------------
--- screen shot --
-------------------
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————easy screenshot to clipboard
 hs.hotkey.bind({"cmd"}, "escape", function()
 	
 	hs.eventtap.keyStroke({"ctrl","cmd","shift"}, "4")
 
   end)
 
-------------------
--- mobile view --
-------------------
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————resize window to fit mobile view
 hs.hotkey.bind("0", "f19", function()
 	
     local win = hs.window.focusedWindow()
@@ -126,9 +225,7 @@ hs.hotkey.bind("0", "f19", function()
   end)
 
 
-------------------
--- Add to Englishbox --
-------------------
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— Add selected word/sentence to Englishbox
   hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f19", function()
 
   hs.eventtap.keyStroke({"cmd"}, "c")
@@ -174,9 +271,8 @@ end write_to_file
   -- hs.alert.show(ok)
 end)
 
-------------------
--- look up www.vocabulary.com --
-------------------
+
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word vocabulary/google translate
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f16", function()
 
   hs.eventtap.keyStroke({"cmd"}, "c")
@@ -208,9 +304,7 @@ tell application "Google Chrome"
 end)
 
 
-------------------
--- look up images.google.com --
-------------------
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word images.google.com
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f17", function()
 
 	hs.eventtap.keyStroke({"cmd"}, "c")
@@ -236,9 +330,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f17", function()
 end)
 
 
-------------------
--- pause youtube --
-------------------
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— pause youtube
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f18", function()
 
   script = [[
@@ -262,7 +354,7 @@ end)
 
 
 ------------------------------------------------------------------------
--- For dev --
+-- CBD--
 ------------------------------------------------------------------------
 ------------------
 -- screen color picker not working--
