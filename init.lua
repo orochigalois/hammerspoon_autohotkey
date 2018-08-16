@@ -43,10 +43,11 @@ function windowFour()
 	
 end
 
-hs.hotkey.bind("0", "escape", function()
+eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
+	hs.alert.show("layout the top 4 windows equally")
 	windowFour()
 end)
-
+eventtapMiddleMouseDown:start()
 
 ------------------
 -- layout the top 2 windows equally --
