@@ -173,12 +173,10 @@ function windowFour()
 	end
 	
 end
-
-eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
-	hs.alert.show("layout the top 4 windows equally")
+hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
 	windowFour()
 end)
-eventtapMiddleMouseDown:start()
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 2 windows equally
 function windowTwo()
@@ -213,10 +211,12 @@ function windowTwo()
 	
 end
 
-
-hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
+eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
+	hs.alert.show("layout the top 4 windows equally")
 	windowTwo()
 end)
+eventtapMiddleMouseDown:start()
+
 
 
 
