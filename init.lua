@@ -132,6 +132,38 @@ if alwaysShow then updateMenu() end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 4 windows equally
 
+
+function loadword()
+	script = [[
+		
+	
+	
+		on readFile(unixPath)
+		
+		set foo to (open for access (POSIX file unixPath))
+		
+		set lns to paragraphs of (read foo as «class utf8»)
+		
+		close access foo
+		
+		return lns
+		
+	end readFile
+	
+	
+	set lns to readFile("/Users/alex/EnglishBox/daily.txt")
+	return lns
+			
+	]]
+		
+	  ok,result = hs.applescript(script)
+	  
+	  hs.fnutils.each(result, function(object)
+		hs.alert.show(object)
+	  end)
+	end
+
+
 function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
@@ -174,8 +206,9 @@ function windowFour()
 	
 end
 hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
-	loadword()
+	
 	windowFour()
+	loadword()
 	
 end)
 
@@ -212,42 +245,11 @@ function windowTwo()
 	end
 	
 end
-function loadword()
-script = [[
-	
 
-
-	on readFile(unixPath)
-	
-	set foo to (open for access (POSIX file unixPath))
-	
-	set lns to paragraphs of (read foo as «class utf8»)
-	
-	close access foo
-	
-	return lns
-	
-end readFile
-
-
-set lns to readFile("/Users/alex/EnglishBox/daily.txt")
-repeat with ln in lns
-	
-	display dialog ln giving up after 1
-	say ln
-end repeat
-
-
-
-		
-]]
-	
-  ok,result = hs.applescript(script)
-end
 eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
-	-- hs.alert.show("layout the top 4 windows equally")
-	loadword()
 	windowTwo()
+	loadword()
+	
 	
 end)
 eventtapMiddleMouseDown:start()
