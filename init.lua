@@ -157,11 +157,13 @@ function loadword()
 	]]
 		
 	  ok,result = hs.applescript(script)
-	  
+	  showme = ""
 	  hs.fnutils.each(result, function(object)
-		hs.alert.show(object)
-		--print(object)
+		showme = showme .. object .."\n"
+
 	  end)
+	--   hs.alert.show(showme)
+
 	end
 
 
@@ -209,7 +211,7 @@ end
 hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
 	
 	windowFour()
-	loadword()
+	-- loadword()
 	
 end)
 
@@ -249,7 +251,7 @@ end
 
 eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
 	windowTwo()
-	loadword()
+	-- loadword()
 	
 	
 end)
