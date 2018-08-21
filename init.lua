@@ -133,39 +133,37 @@ if alwaysShow then updateMenu() end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 4 windows equally
 
 
-function loadword()
-	script = [[
-		
-	
-	
-		on readFile(unixPath)
-		
-		set foo to (open for access (POSIX file unixPath))
-		
-		set lns to paragraphs of (read foo as «class utf8»)
-		
-		close access foo
-		
-		return lns
-		
-	end readFile
-	
-	
-	set lns to readFile("/Users/alex/EnglishBox/daily.txt")
-	return lns
-			
-	]]
-		
-	  ok,result = hs.applescript(script)
-	  showme = ""
-	  hs.fnutils.each(result, function(object)
-		showme = showme .. object .."\n"
-
-	  end)
-	--   hs.alert.show(showme)
-
+-- see if the file exists
+function file_exists(file)
+	local f = io.open(file, "rb")
+	if f then f:close() end
+	return f ~= nil
+end
+  
+-- get all lines from a file, returns an empty 
+-- list/table if the file does not exist
+function lines_from(file)
+	if not file_exists(file) then return {} end
+	lines = {}
+	for line in io.lines(file) do 
+		lines[#lines + 1] = line
 	end
+	return lines
+end
+  
+  
 
+function showWords()
+	-- tests the functions above
+	local file = '/Users/alex/EnglishBox/daily.txt'
+	local lines = lines_from(file)
+
+	-- print all line numbers and their contents
+	for k,v in pairs(lines) do
+		print('line[' .. k .. ']', v)
+		hs.alert.show(v)
+	end
+end
 
 function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
@@ -209,10 +207,8 @@ function windowFour()
 	
 end
 hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
-	
+	showWords()
 	windowFour()
-	-- loadword()
-	
 end)
 
 
@@ -250,10 +246,8 @@ function windowTwo()
 end
 
 eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
-	windowTwo()
-	-- loadword()
-	
-	
+	showWords()
+	windowTwo()	
 end)
 eventtapMiddleMouseDown:start()
 
@@ -497,3 +491,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f13", function()
   -- print(hs.inspect(result))
   -- hs.alert.show(ok)
 end)
+
+
+
+
