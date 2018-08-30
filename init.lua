@@ -264,6 +264,14 @@ hs.hotkey.bind({"cmd"}, "escape", function()
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————resize window to fit mobile view
+  hs.hotkey.bind({"cmd"}, "5", function()
+	
+   
+	hs.application.launchOrFocus("Messages")
+  end)
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————resize window to fit mobile view
 hs.hotkey.bind("0", "f19", function()
 	
     local win = hs.window.focusedWindow()
@@ -276,6 +284,8 @@ hs.hotkey.bind("0", "f19", function()
     f.w = 320
     f.h = max.h/2
     win:setFrame(f)
+
+
   end)
 
 
