@@ -72,6 +72,7 @@ updateMenu = function()-- {{{1
 			{title = "Stop", fn = function() stop() end},
 			{title = "5:00", fn = function() min5() end},
 			{title = "10:00", fn = function() min10() end},
+			{title = "20:00", fn = function() min20() end},
         }
     if isActive then
         table.insert(items, 1, {title = "Pause", fn = function() pause() end})
@@ -103,6 +104,15 @@ min10 = function()-- {{{1
     timer:start()
     isActive = true
 end-- }}}1
+
+min20 = function()-- {{{1
+	if isActive then return end
+	duration=20
+	timeLeft = duration * 60
+    timer:start()
+    isActive = true
+end-- }}}1
+
 
 pause = function()-- {{{1
     if not isActive then return end
