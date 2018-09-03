@@ -52,8 +52,8 @@ updateTimer = function()-- {{{1
 				]]
 		ok,result = hs.applescript(script)
 		hs.alert.show("🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺")
-		duration=20
-		timeLeft = duration * 60
+		-- duration=20
+		-- timeLeft = duration * 60
     end
 end-- }}}1
 
