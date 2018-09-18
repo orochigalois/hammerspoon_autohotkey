@@ -1,3 +1,17 @@
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————readme begin
+--1.{"cmd", "alt", "ctrl"}, C         start 20mins timer
+--2.`     						      layout the top 4 windows equally
+--3.{"cmd"}, "5"                      layout the top 2 windows equally
+--4.{"cmd"}, "escape"                 screen shot
+--5.F19                               resize window to fit mobile view
+--6.{"cmd", "alt", "ctrl"}, "f19"     Add selected word/sentence to Englishbox
+--7."cmd", "alt", "ctrl"}, "f16"      look up selected word vocabulary/google translate
+--8."cmd", "alt", "ctrl"}, "f17"      look up selected word images.google.com
+--9."cmd", "alt", "ctrl"}, "f18"      pause youtube
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————readme end
+
+
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————20 mins timer
 -- http://github.com/dbmrq/dotfiles/
 
@@ -255,12 +269,16 @@ function windowTwo()
 	
 end
 
-eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
-	showWords()
-	windowTwo()	
-end)
-eventtapMiddleMouseDown:start()
+-- eventtapMiddleMouseDown = hs.eventtap.new({ hs.eventtap.event.types.middleMouseDown }, function(event)
+-- 	showWords()
+-- 	windowTwo()	
+-- end)
+-- eventtapMiddleMouseDown:start()
 
+hs.hotkey.bind({"cmd"}, "5", function()   
+	showWords()
+	windowTwo()
+end)
 
 
 
@@ -274,11 +292,11 @@ hs.hotkey.bind({"cmd"}, "escape", function()
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————focus on messages
-  hs.hotkey.bind({"cmd"}, "5", function()
+--   hs.hotkey.bind({"cmd"}, "5", function()
 	
    
-	hs.application.launchOrFocus("Messages")
-  end)
+-- 	hs.application.launchOrFocus("Messages")
+--   end)
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————resize window to fit mobile view
