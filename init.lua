@@ -191,37 +191,42 @@ end
 
 function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-	-- windows = hs.window.orderedWindows()
+
+	local win = hs.window.focusedWindow()
+    local screen = win:screen()
+	local max = screen:frame()
+
+
 	for i,win in pairs(windows) do
 		local f = win:frame()
 		if i == 1 then
 			f.x = 0
 			f.y = 0
-			f.w = 1280
-			f.h = 720-40
+			f.w = max.w/2
+			f.h = max.h/2
 		end
 
 		
 
 		if i == 2 then
 			f.x = 0
-			f.y = 720-16
-			f.w = 1280
-			f.h = 720-40
+			f.y = max.h/2
+			f.w = max.w/2	
+			f.h = max.h/2
 		end
 
 		if i == 3 then
-			f.x = 1280
+			f.x = max.w/2
 			f.y = 0
-			f.w = 1280
-			f.h = 720-40
+			f.w = max.w/2
+			f.h = max.h/2
 		end
 
 		if i == 4 then
-			f.x = 1280
-			f.y = 720-16
-			f.w = 1280
-			f.h = 720-40
+			f.x = max.w/2
+			f.y = max.h/2
+			f.w = max.w/2
+			f.h = max.h/2
 		end
 		
 		
@@ -240,23 +245,27 @@ end)
 function windowTwo()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
+
+	local win = hs.window.focusedWindow()
+    local screen = win:screen()
+	local max = screen:frame()
+
 	for i,win in pairs(windows) do
 		local f = win:frame()
-		local screen = win:screen()
-    	local max = screen:frame()
+		
 		if i == 1 then
 			f.x = 0
 			f.y = 0
-			f.w = 1280
+			f.w = max.w/2
 			f.h = max.h
 		end
 
 		
 
 		if i == 2 then
-			f.x = 1280
+			f.x = max.w/2
 			f.y = 0
-			f.w = 1280
+			f.w = max.w/2
 			f.h = max.h
 		end
 
