@@ -472,6 +472,40 @@ end)
 
 
 
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— full screen
+
+
+function windowOne()
+	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
+
+	local win = hs.window.focusedWindow()
+    local screen = win:screen()
+	local max = screen:frame()
+
+	for i,win in pairs(windows) do
+		local f = win:frame()
+		
+		if i == 1 then
+			f.x = 0
+			f.y = 0
+			f.w = max.w
+			f.h = max.h
+		end
+
+		win:setFrame(f)
+	end
+	
+end
+
+
+hs.hotkey.bind({"cmd", "alt"}, "f", function()
+	showWords()
+	windowOne()
+end)
+
+
+
+
 
 ------------------------------------------------------------------------
 -- CBD--
