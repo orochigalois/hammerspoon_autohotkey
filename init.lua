@@ -189,6 +189,23 @@ function showWords()
 	end
 end
 
+
+function closeAllFinderWindows()
+
+	-- loop over all finder window and close
+	local running = hs.application.runningApplications()
+	for i, app in ipairs(running) do
+
+
+		if app:name() == 'Finder' then
+			for i,win in ipairs(app:visibleWindows()) do
+				win:close()
+			end
+
+		end
+	end
+end
+
 function windowFour()
 	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
 	-- windows = hs.window.orderedWindows()
@@ -231,6 +248,7 @@ function windowFour()
 	
 end
 hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
+	closeAllFinderWindows()
 	showWords()
 	windowFour()
 end)
@@ -275,7 +293,8 @@ end
 -- end)
 -- eventtapMiddleMouseDown:start()
 
-hs.hotkey.bind({"cmd"}, "5", function()   
+hs.hotkey.bind({"alt"}, "a", function()   
+	closeAllFinderWindows()
 	showWords()
 	windowTwo()
 end)
