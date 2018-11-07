@@ -513,6 +513,35 @@ end)
 
 
 
+function toLowercase()
+	sel = getTextSelection()
+	newSel = ""
+	if sel then hs.eventtap.keyStrokes(string.lower(sel)) end
+end
+function toUncamelCase()
+	-- Scan for uppercase char, replace with a space and the lowercase of it
+	sel = getTextSelection()
+	if sel == nil then return end
+	newSel = string.sub(sel, 2)
+	FirstChar = string.sub(sel, 1, 1)
+	newSel=FirstChar..string.lower(newSel)
+
+	hs.eventtap.keyStrokes(newSel)
+end
+
+function getTextSelection()	-- returns text or nil while leaving pasteboard undisturbed.
+	local oldText = hs.pasteboard.getContents()
+	hs.eventtap.keyStroke({"cmd"}, "c")
+	hs.timer.usleep(25000)
+	local text = hs.pasteboard.getContents()	-- if nothing is selected this is unchanged
+	hs.pasteboard.setContents(oldText)
+	if text ~= oldText then 
+	  return text
+	else
+	  return ""
+	end
+end
+hs.hotkey.bind({"cmd", "alt", "ctrl"},  "f14", nil, function()  toUncamelCase()	end )
 
 
 ------------------------------------------------------------------------
