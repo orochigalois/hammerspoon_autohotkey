@@ -20,8 +20,12 @@ require "app-google-hangouts"
 
 
 
-
-
+hs.hotkey.bind("0", "f14", function()
+	hs.eventtap.keyStrokes("<p>")
+end)
+hs.hotkey.bind("0", "f15", function()
+	hs.eventtap.keyStrokes("</p>")
+end)
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 2 windows equally
