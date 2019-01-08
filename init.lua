@@ -130,7 +130,8 @@ hs.hotkey.bind("0", "f18", function()
 
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— Add selected word/sentence to Englishbox
-  hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f19", function()
+--run 'xcode-select --install' in terminal if this doesn't work normally  
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f19", function()
 
   hs.eventtap.keyStroke({"cmd"}, "c")
   script = [[
