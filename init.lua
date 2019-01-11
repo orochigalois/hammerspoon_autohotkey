@@ -2,6 +2,7 @@ require "app-timer"
 require "app-layout4"
 require "app-mysql"
 require "app-google-hangouts"
+require "app-legpress"
 
 
 
@@ -72,7 +73,7 @@ end
 -- eventtapMiddleMouseDown:start()
 
 hs.hotkey.bind({"alt"}, "a", function()   
-	closeAllFinderWindows()
+	-- closeAllFinderWindows()
 	showWords()
 	windowTwo()
 end)
