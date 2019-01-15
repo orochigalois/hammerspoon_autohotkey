@@ -14,7 +14,7 @@
 -- end)
 -- eventtapMiddleMouseDown:start()
 
-hs.hotkey.bind("0", "f18", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "1", function()
 	local win = hs.window.focusedWindow()
 	local title = win:title()
 
