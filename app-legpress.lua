@@ -15,11 +15,6 @@
 -- eventtapMiddleMouseDown:start()
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "1", function()
-	local win = hs.window.focusedWindow()
-	local title = win:title()
-
-	if string.match(title, "Google Hangouts") then
 		hs.eventtap.keyStrokes("git clone https://alexyinxin@bitbucket.org/legroomteam/legpress-wp-base-install.git")
 		hs.eventtap.keyStroke({}, "return")
-	end 
 end)

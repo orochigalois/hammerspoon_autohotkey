@@ -1,6 +1,6 @@
 require "app-timer"
 require "app-layout4"
-require "app-mysql"
+-- require "app-mysql"
 require "app-google-hangouts"
 require "app-legpress"
 
@@ -132,7 +132,7 @@ hs.hotkey.bind("0", "f18", function()
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— Add selected word/sentence to Englishbox
 --run 'xcode-select --install' in terminal if this doesn't work normally  
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f19", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "9", function()
 
   hs.eventtap.keyStroke({"cmd"}, "c")
   script = [[
@@ -179,7 +179,7 @@ end)
 
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word vocabulary/google translate
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f16", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "6", function()
 
   hs.eventtap.keyStroke({"cmd"}, "c")
 
@@ -211,7 +211,7 @@ end)
 
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word images.google.com
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f17", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "7", function()
 
 	hs.eventtap.keyStroke({"cmd"}, "c")
 
@@ -237,7 +237,7 @@ end)
 
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— pause youtube
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "f18", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "8", function()
 
   script = [[
 		to clickClassName(theClassName, elementnum)
