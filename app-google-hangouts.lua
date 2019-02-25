@@ -24,3 +24,18 @@ hs.hotkey.bind("0", "f19", function()
 		hs.eventtap.keyStroke({}, "return")
 	end 
 end)
+
+
+
+hs.hotkey.bind({"cmd"}, "f19", function()
+	
+	local win = hs.window.focusedWindow()
+	local title = win:title()
+	print (title)
+
+	if string.match(title, "Google Hangouts") then
+		hs.eventtap.keyStrokes("No worries :)")
+		hs.eventtap.keyStroke({}, "return")
+	end 
+
+end)
