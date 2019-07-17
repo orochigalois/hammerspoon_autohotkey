@@ -19,7 +19,7 @@ hs.hotkey.bind("0", "f19", function()
 	local title = win:title()
 	print (title)
 
-	if string.match(title, "Google Hangouts") then
+	if string.match(title, "Slack") then
 		hs.eventtap.keyStrokes("Cool,thanks! :)")
 		hs.eventtap.keyStroke({}, "return")
 	end 
@@ -33,8 +33,22 @@ hs.hotkey.bind({"cmd"}, "f19", function()
 	local title = win:title()
 	print (title)
 
-	if string.match(title, "Google Hangouts") then
+	if string.match(title, "Slack") then
 		hs.eventtap.keyStrokes("No worries :)")
+		hs.eventtap.keyStroke({}, "return")
+	end 
+
+end)
+
+
+hs.hotkey.bind({"ctrl"}, "f19", function()
+	
+	local win = hs.window.focusedWindow()
+	local title = win:title()
+	print (title)
+
+	if string.match(title, "Slack") then
+		hs.eventtap.keyStrokes("For sure :)")
 		hs.eventtap.keyStroke({}, "return")
 	end 
 
