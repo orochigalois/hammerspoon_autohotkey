@@ -28,6 +28,16 @@ hs.hotkey.bind("0", "f15", function()
 	hs.eventtap.keyStrokes("</p>")
 end)
 
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "=", function()
+	local screen = hs.screen.mainScreen()
+	screen:setMode(2560, 1440, 1.0)
+end)
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "-", function()
+	local screen = hs.screen.mainScreen()
+	screen:setMode(1600, 900, 1.0)
+end)
+
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————layout the top 2 windows equally
 function windowTwo()
