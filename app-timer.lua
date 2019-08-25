@@ -137,5 +137,6 @@ reset = function()-- {{{1
 end-- }}}1
 
 hs.hotkey.bind(super, hotkey, function() start() end)
+hs.hotkey.bind(super, "D", function() stop() end)
 
 if alwaysShow then updateMenu() end
