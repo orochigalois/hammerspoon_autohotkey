@@ -96,7 +96,9 @@ function windowFour()
 	end
 	
 end
-hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
+-- hs.hotkey.bind("0", 50, function()--50 is the ` raw keycode
+hs.hotkey.bind({"alt"}, "s", function()   
+
 	closeAllFinderWindows()
 	showWords()
 	windowFour()
