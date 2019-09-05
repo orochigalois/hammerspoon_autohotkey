@@ -1,12 +1,36 @@
-YOUR_TOKEN = "XK13PjrD";
-REMOTE_URL = "http://sg.local";
+YOUR_TOKEN = "Hi5X8Bz2"
+REMOTE_URL = "http://sg.local"
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "0", function()
 
     local text = current_selection()
-    local url =
-    REMOTE_URL .. "/wp-admin/admin-ajax.php?action=collect_sentence&sentence=" ..
-            encodeURI(text) .. ".&user_token=" .. YOUR_TOKEN
+    local url = REMOTE_URL ..
+                    "/wp-admin/admin-ajax.php?action=collect_sentence&sentence=" ..
+                    encodeURI(text) .. ".&sg_user_token=" .. YOUR_TOKEN
+
+    local res = hs.urlevent.openURL(url)
+    print(res)
+    hs.alert.show(text)
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "1", function()
+
+    local text = current_selection()
+    local url = REMOTE_URL ..
+                    "/wp-admin/admin-ajax.php?action=collect_word&word=" ..
+                    encodeURI(text) .. "&sg_user_token=" .. YOUR_TOKEN
+
+    local res = hs.urlevent.openURL(url)
+    print(res)
+    hs.alert.show(text)
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "2", function()
+
+    local text = current_selection()
+    local url = REMOTE_URL ..
+                    "/wp-admin/admin-ajax.php?action=collect_sentence_for_word&sentence=" ..
+                    encodeURI(text) .. "&sg_user_token=" .. YOUR_TOKEN
 
     local res = hs.urlevent.openURL(url)
     print(res)
