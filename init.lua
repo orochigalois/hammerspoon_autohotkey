@@ -189,35 +189,27 @@ end write_to_file
 end)
 
 
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "5", function()
+
+	local text = current_selection()
+    local url = "https://translate.google.com/#en/zh-CN/" ..
+                    encodeURI(text)
+
+    local res = hs.urlevent.openURL(url)
+    print(res)
+	
+end)
+
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word vocabulary/google translate
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "6", function()
 
-  hs.eventtap.keyStroke({"cmd"}, "c")
+	local text = current_selection()
+    local url = "https://www.vocabulary.com/dictionary/" ..
+                    encodeURI(text)
 
-
-  script = [[
-	set selectedText to the clipboard
-	say selectedText
-	tell application "/Applications/Google Chrome.app"
-    make new window
-    activate
-    open location "https://translate.google.com/#en/zh-CN/" & selectedText
-end tell
-delay 1
-tell application "Google Chrome"
-		activate
-		open location "https://www.vocabulary.com/dictionary/"
-		tell application "System Events"
-			delay 1
-			keystroke selectedText
-		end tell
-	end tell
-		
-]]
-  ok,result = hs.applescript(script)
-  -- print(result)
-  -- print(hs.inspect(result))
-  -- hs.alert.show(ok)
+    local res = hs.urlevent.openURL(url)
+    print(res)
+	
 end)
 
 
