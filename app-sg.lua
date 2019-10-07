@@ -1,5 +1,5 @@
-YOUR_TOKEN = "Hi5X8Bz2"
-REMOTE_URL = "http://sg.local"
+YOUR_TOKEN = "QNXPfdl3";
+REMOTE_URL = "http://alexyin.net/sg";
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "0", function()
 
