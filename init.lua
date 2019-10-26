@@ -200,7 +200,12 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "5", function()
                     encodeURI(text)
 
     local res = hs.urlevent.openURL(url)
-    print(res)
+	print(res)
+	script = [[
+		set selectedText to the clipboard
+		say selectedText
+	]]
+	ok,result = hs.applescript(script)
 	
 end)
 
@@ -212,7 +217,11 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "6", function()
                     encodeURI(text)
 
     local res = hs.urlevent.openURL(url)
-    print(res)
+	script = [[
+		set selectedText to the clipboard
+		say selectedText
+	]]
+	ok,result = hs.applescript(script)
 	
 end)
 
@@ -224,6 +233,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "7", function()
 
   script = [[
 	set selectedText to the clipboard
+	say selectedText
 	tell application "Google Chrome"
 		activate
 		open location "https://images.google.com/"
