@@ -29,6 +29,10 @@ hs.hotkey.bind("0", "f15", function()
 	hs.eventtap.keyStrokes("</p>")
 end)
 
+hs.hotkey.bind("0", "f19", function()
+	hs.eventtap.keyStrokes("Aa123456#")
+end)
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "=", function()
 	local screen = hs.screen.mainScreen()
 	screen:setMode(2560, 1440, 1.0)
