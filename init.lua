@@ -4,6 +4,7 @@ require "app-layout4"
 require "app-google-hangouts"
 require "app-legpress"
 require "app-sg"
+require "app-cpu"
 
 
 
@@ -41,6 +42,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "-", function()
 	local screen = hs.screen.mainScreen()
 	screen:setMode(1600, 900, 1.0)
 end)
+
+
+
+
 
 
 
