@@ -109,7 +109,7 @@ end)
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————For GluePrint toggle hidden/automatically focus
-hs.hotkey.bind("0", "f16", function()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", function()
 	if hs.application.get("GluePrint"):isHidden() then
         hs.application.get("GluePrint"):unhide()
 		hs.application.get("GluePrint"):activate()
