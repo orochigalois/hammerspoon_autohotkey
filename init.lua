@@ -42,7 +42,7 @@ end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "-", function()
 	local screen = hs.screen.mainScreen()
 	-- screen:setMode(1600, 900, 1.0) // for iMac
-	screen:setMode(1440, 900, 1.0)
+	screen:setMode(1680, 1050, 1.0)
 end)
 
 
