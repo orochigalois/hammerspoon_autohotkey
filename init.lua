@@ -114,7 +114,7 @@ hs.hotkey.bind({"cmd", "alt"}, "pad0", function()
 		local f = win:frame()
 		
 		if i == 1 then
-			f.x = max.w/2
+			f.x = 0
 			f.y = 0
 			f.w = max.w/2
 			f.h = max.h
@@ -137,7 +137,7 @@ hs.hotkey.bind({"cmd", "alt"}, "pad.", function()
 		local f = win:frame()
 		
 		if i == 1 then
-			f.x = 0
+			f.x = max.w/2
 			f.y = 0
 			f.w = max.w/2
 			f.h = max.h
