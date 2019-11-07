@@ -162,6 +162,15 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", function()
 	end
   end)
 
+  hs.hotkey.bind("0", "f16", function()
+	if hs.application.get("GluePrint"):isHidden() then
+        hs.application.get("GluePrint"):unhide()
+		hs.application.get("GluePrint"):activate()
+    else
+        hs.application.get("GluePrint"):hide()
+	end
+  end)
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————easy screenshot to clipboard
 hs.hotkey.bind({"cmd"}, "escape", function()
 	
