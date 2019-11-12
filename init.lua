@@ -101,53 +101,75 @@ hs.hotkey.bind({"alt"}, "a", function()
 end)
 
 
-hs.hotkey.bind({"cmd", "alt"}, "pad0", function()
+hs.hotkey.bind({"cmd", "alt"}, "left", function()
 
-	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-	-- windows = hs.window.orderedWindows()
+	
+    
 
 	local win = hs.window.focusedWindow()
-    local screen = win:screen()
+
+	local screen = win:screen()
 	local max = screen:frame()
 
-	for i,win in pairs(windows) do
-		local f = win:frame()
-		
-		if i == 1 then
-			f.x = 0
-			f.y = 0
-			f.w = max.w/2
-			f.h = max.h
-		end
+	local frame = win:frame()
 		
 		
-		win:setFrame(f)
-	end
+	frame.x = 0
+	frame.y = 0
+	frame.w = max.w/2
+	frame.h = max.h
+	
+		
+		
+	win:setFrame(frame)
+	
   end)
 
-hs.hotkey.bind({"cmd", "alt"}, "pad.", function() 
-	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-	-- windows = hs.window.orderedWindows()
+hs.hotkey.bind({"cmd", "alt"}, "right", function() 
+	local win = hs.window.focusedWindow()
+
+	local screen = win:screen()
+	local max = screen:frame()
+	
+	local frame = win:frame()
+		
+		
+	frame.x = max.w/2
+	frame.y = 0
+	frame.w = max.w/2
+	frame.h = max.h
+		
+	win:setFrame(frame)
+
+end)
+
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— full screen
+
+
+function windowOne()
 
 	local win = hs.window.focusedWindow()
-    local screen = win:screen()
+
+	local screen = win:screen()
 	local max = screen:frame()
-
-	for i,win in pairs(windows) do
-		local f = win:frame()
-		
-		if i == 1 then
-			f.x = max.w/2
-			f.y = 0
-			f.w = max.w/2
-			f.h = max.h
-		end
+	
+	local frame = win:frame()
 		
 		
-		win:setFrame(f)
-	end
+	frame.x = 0
+	frame.y = 0
+	frame.w = max.w
+	frame.h = max.h
+		
+	win:setFrame(frame)
+
+	
+end
 
 
+hs.hotkey.bind({"cmd", "alt"}, "f", function()
+	showWords()
+	windowOne()
 end)
 
 
@@ -335,36 +357,7 @@ end)
 
 
 
---———————————————————————————————————————————————————————————————————————————————————————————————————————————————— full screen
 
-
-function windowOne()
-	windows = hs.window.filter.default:getWindows(hs.window.filter.sortByFocusedLast)
-
-	local win = hs.window.focusedWindow()
-    local screen = win:screen()
-	local max = screen:frame()
-
-	for i,win in pairs(windows) do
-		local f = win:frame()
-		
-		if i == 1 then
-			f.x = 0
-			f.y = 0
-			f.w = max.w
-			f.h = max.h
-		end
-
-		win:setFrame(f)
-	end
-	
-end
-
-
-hs.hotkey.bind({"cmd", "alt"}, "f", function()
-	showWords()
-	windowOne()
-end)
 
 
 
