@@ -34,6 +34,22 @@ hs.hotkey.bind("0", "f19", function()
 	hs.eventtap.keyStrokes("Aa123456#")
 end)
 
+
+-- hs.eventtap.new({hs.eventtap.event.types.scrollWheel,hs.eventtap.event.types.flagsChanged}, function(e)
+-- 	tapKey= e:getProperty(hs.eventtap.event.properties.keyboardEventKeycode)
+-- 	print(tapKey)
+-- 	scrollWheelClick = e:getProperty(hs.eventtap.event.properties.scrollWheelEventDeltaAxis1)
+-- 	if tapKey==55
+-- 		hs.eventtap.scrollWheel({ scrollWheelClick, 0 }, {"shift"}, 'pixel')
+-- 	end
+-- 	if scrollWheelClick > 0 then
+-- 		-- hs.alert.show('up')
+--     elseif scrollWheelClick < 0 then
+--         -- hs.alert.show('down')
+--     end
+-- end):start()
+
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "=", function()
 	local screen = hs.screen.mainScreen()
 	-- screen:setMode(2560, 1440, 1.0)  // for iMac
