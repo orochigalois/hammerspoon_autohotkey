@@ -48,7 +48,7 @@ updateTimer = function()-- {{{1
         stop()
 		
 		script = [[
-					say "Time up, Get up, Alex"
+					say "20 minutes"
 				]]
 		ok,result = hs.applescript(script)
 		hs.alert.show("🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺")

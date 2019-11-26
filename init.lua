@@ -496,3 +496,19 @@ end)
 
 
 
+
+
+
+------------------------------------------------------------------------
+-- Keep live clicking--
+------------------------------------------------------------------------
+
+
+-- local timer = hs.timer.new(10, function() updateTimer() end)
+
+-- updateTimer = function()
+-- 	hs.alert.show("10s Keep Live Click")
+-- 	hs.eventtap.leftClick({ ["y"] = 181,["x"] = 264})
+-- end
+
+-- timer:start()
