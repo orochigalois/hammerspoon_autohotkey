@@ -1,4 +1,4 @@
-YOUR_TOKEN = "QNXPfdl3";
+YOUR_TOKEN = "bMDGAndr";
 REMOTE_URL = "http://alexyin.net/sg";
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "0", function()
