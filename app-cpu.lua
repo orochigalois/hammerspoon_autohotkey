@@ -3,6 +3,7 @@ function trim1(s)
 	return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+
 function makeStatsMenu()
 	if cpuMenu == nil then
 		cpuMenu = hs.menubar.new()
@@ -16,7 +17,11 @@ function makeStatsMenu()
 	end
 	local shell_command = "istats fan speed --value-only"
 	fan =  hs.execute(shell_command,true)
-	fanMenu:setTitle("FAN: "..trim1(fan).."RPM")
+
+
+	fan = fan:gsub("%s+", "/")
+	print(fan)
+	fanMenu:setTitle("FAN: "..fan.."RPM")
 end
 updateStatsInterval = 1
 statsMenuTimer = hs.timer.new(updateStatsInterval, makeStatsMenu)
