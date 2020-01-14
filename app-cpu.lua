@@ -20,7 +20,6 @@ function makeStatsMenu()
 
 
 	fan = fan:gsub("%s+", "/")
-	print(fan)
 	fanMenu:setTitle("FAN: "..fan.."RPM")
 end
 updateStatsInterval = 1

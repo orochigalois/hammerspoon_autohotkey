@@ -4,7 +4,7 @@ require "app-layout4"
 require "app-google-hangouts"
 require "app-legpress"
 require "app-sg"
-require "app-cpu"
+-- require "app-cpu"
 
 
 
@@ -22,6 +22,26 @@ require "app-cpu"
 
 
 
+--https://github.com/Hammerspoon/hammerspoon/issues/1690
+function showTodoTask()
+    if not todo_draw then
+        local mainScreen = hs.screen.mainScreen()
+        local mainRes = mainScreen:fullFrame()
+        -- local todo_str = hs.execute("~/app/hammerspoon/todo")
+        local todo_str = 'alex'
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color=yellow, paragraphStyle={alignment="center"}})
+		-- local timeframe = hs.geometry.rect((mainRes.w-300)/2,(mainRes.h-200)/2,300,150)
+		local timeframe = hs.geometry.rect(mainRes.x, mainRes.y + (mainRes.h-200)/2, mainRes.w, 150)
+        todo_draw = hs.drawing.text(timeframe,todo)
+        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
+        todo_draw:show()
+        timer = hs.timer.doAfter(4, function() todo_draw:delete() todo_draw=nil end)
+    else
+        todo_draw:delete()
+        todo_draw=nil
+    end
+end
+
 
 hs.hotkey.bind("0", "f14", function()
 	hs.eventtap.keyStrokes("<p>")
@@ -31,7 +51,7 @@ hs.hotkey.bind("0", "f15", function()
 end)
 
 hs.hotkey.bind("0", "f19", function()
-	hs.eventtap.keyStrokes("Aa123456#")
+	-- showTodoTask()
 end)
 
 
