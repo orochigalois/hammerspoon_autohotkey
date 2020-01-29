@@ -50,8 +50,13 @@ updateTimer = function()-- {{{1
 		script = [[
 					say "20 minutes"
 				]]
-		ok,result = hs.applescript(script)
-		hs.alert.show("🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺")
+        ok,result = hs.applescript(script)
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local max = screen:frame()
+        hs.drawing.rectangle{x=0, y=20, w=max.w, h=max.h}
+			:setRoundedRectRadii(0,0):setStroke(true):setStrokeWidth(0)
+			:setFill(true):setFillColor{red=0, blue=0, green = 0, alpha = 1}:show()
 		-- duration=20
 		-- timeLeft = duration * 60
     end
@@ -85,6 +90,10 @@ end-- }}}1
 start = function()-- {{{1
     if isActive then return end
     timer:start()
+    if not hs.drawing then
+        hs.drawing:delete()
+    end
+    
     isActive = true
 end-- }}}1
 
@@ -122,6 +131,7 @@ pause = function()-- {{{1
 end-- }}}1
 
 stop = function()-- {{{1
+    
     pause()
     timeLeft = duration * 60
     if not alwaysShow then
