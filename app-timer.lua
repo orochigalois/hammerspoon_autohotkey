@@ -38,6 +38,8 @@ local timeLeft = duration * 60
 
 local timer = hs.timer.new(1, function() updateTimer() end)
 
+local drawHandle
+
 -- }}}1
 
 updateTimer = function()-- {{{1
@@ -48,17 +50,17 @@ updateTimer = function()-- {{{1
         stop()
 		
 		script = [[
-					say "20 minutes"
+					say "Time up"
 				]]
         ok,result = hs.applescript(script)
         local win = hs.window.focusedWindow()
         local screen = win:screen()
         local max = screen:frame()
-        hs.drawing.rectangle{x=0, y=20, w=max.w, h=max.h}
+        drawHandle=hs.drawing.rectangle{x=0, y=20, w=max.w, h=max.h}
 			:setRoundedRectRadii(0,0):setStroke(true):setStrokeWidth(0)
-			:setFill(true):setFillColor{red=0, blue=0, green = 0, alpha = 1}:show()
-		-- duration=20
-		-- timeLeft = duration * 60
+            :setFill(true):setFillColor{red=0, blue=0, green = 0, alpha = 1}:show()
+        drawHandle:hide(60)
+
     end
 end-- }}}1
 
@@ -90,10 +92,7 @@ end-- }}}1
 start = function()-- {{{1
     if isActive then return end
     timer:start()
-    if not hs.drawing then
-        hs.drawing:delete()
-    end
-    
+
     isActive = true
 end-- }}}1
 
