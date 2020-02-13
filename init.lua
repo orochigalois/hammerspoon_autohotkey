@@ -334,6 +334,33 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "5", function()
 	
 end)
 
+--———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word images.google.com
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "3", function()
+
+	hs.eventtap.keyStroke({"cmd"}, "c")
+
+  script = [[
+	set selectedText to the clipboard
+	say selectedText
+	tell application "Google Chrome"
+		activate
+		open location "https://www.google.com/"
+		tell application "System Events"
+			delay 2
+			keystroke selectedText
+			delay 1
+			keystroke return
+		end tell
+	end tell
+		
+]]
+  ok,result = hs.applescript(script)
+  -- print(result)
+  -- print(hs.inspect(result))
+  -- hs.alert.show(ok)
+end)
+
+
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— look up selected word vocabulary/google translate
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "6", function()
 

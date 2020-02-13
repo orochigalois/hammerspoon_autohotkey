@@ -56,7 +56,7 @@ updateTimer = function()-- {{{1
         local win = hs.window.focusedWindow()
         local screen = win:screen()
         local max = screen:frame()
-        drawHandle=hs.drawing.rectangle{x=0, y=20, w=max.w, h=max.h}
+        drawHandle=hs.drawing.rectangle{x=0, y=23, w=max.w, h=max.h}
 			:setRoundedRectRadii(0,0):setStroke(true):setStrokeWidth(0)
             :setFill(true):setFillColor{red=0, blue=0, green = 0, alpha = 1}:show()
         drawHandle:hide(60)
