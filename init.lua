@@ -34,7 +34,7 @@ function showTodoTask()
         todo_draw = hs.drawing.text(timeframe,todo)
         todo_draw:setLevel(hs.drawing.windowLevels.overlay)
         todo_draw:show()
-        timer = hs.timer.doAfter(5, function() todo_draw:delete() todo_draw=nil end)
+        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
     else
         todo_draw:delete()
         todo_draw=nil
@@ -42,11 +42,26 @@ function showTodoTask()
 end
 
 
-hs.hotkey.bind("0", "f14", function()
+hs.hotkey.bind("0", "f19", function()
 	-- hs.eventtap.keyStrokes("<p>")
 	showTodoTask()
 end)
-hs.hotkey.bind("0", "f15", function()
+hs.hotkey.bind({"cmd"}, "f19", function()
+	if not todo_draw then
+        local mainScreen = hs.screen.mainScreen()
+		local mainRes = mainScreen:fullFrame()
+        local todo_str = 'Total:  ' .. score
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color=red, paragraphStyle={alignment="center"}})
+        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-400)/2,1200,300)
+        todo_draw = hs.drawing.text(timeframe,todo)
+        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
+        todo_draw:show()
+    else
+        todo_draw:delete()
+        todo_draw=nil
+    end
+end)
+hs.hotkey.bind({"ctrl"}, "f19", function()
 	score=0
 	-- hs.eventtap.keyStrokes("</p>")
 end)
