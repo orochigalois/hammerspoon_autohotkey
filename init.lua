@@ -21,21 +21,20 @@ require "app-sg"
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————readme end
 
 
-
+local score = 0
 --https://github.com/Hammerspoon/hammerspoon/issues/1690
 function showTodoTask()
     if not todo_draw then
         local mainScreen = hs.screen.mainScreen()
-        local mainRes = mainScreen:fullFrame()
-        -- local todo_str = hs.execute("~/app/hammerspoon/todo")
-        local todo_str = 'alex'
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color=yellow, paragraphStyle={alignment="center"}})
-		-- local timeframe = hs.geometry.rect((mainRes.w-300)/2,(mainRes.h-200)/2,300,150)
-		local timeframe = hs.geometry.rect(mainRes.x, mainRes.y + (mainRes.h-200)/2, mainRes.w, 150)
+		local mainRes = mainScreen:fullFrame()
+		score= score +1
+        local todo_str = 'Andrew:  ' .. score
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color=red, paragraphStyle={alignment="center"}})
+        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-400)/2,1200,300)
         todo_draw = hs.drawing.text(timeframe,todo)
         todo_draw:setLevel(hs.drawing.windowLevels.overlay)
         todo_draw:show()
-        timer = hs.timer.doAfter(4, function() todo_draw:delete() todo_draw=nil end)
+        timer = hs.timer.doAfter(5, function() todo_draw:delete() todo_draw=nil end)
     else
         todo_draw:delete()
         todo_draw=nil
@@ -44,15 +43,15 @@ end
 
 
 hs.hotkey.bind("0", "f14", function()
-	hs.eventtap.keyStrokes("<p>")
+	-- hs.eventtap.keyStrokes("<p>")
+	showTodoTask()
 end)
 hs.hotkey.bind("0", "f15", function()
-	hs.eventtap.keyStrokes("</p>")
+	score=0
+	-- hs.eventtap.keyStrokes("</p>")
 end)
 
-hs.hotkey.bind("0", "f19", function()
-	-- showTodoTask()
-end)
+
 
 
 -- hs.eventtap.new({hs.eventtap.event.types.scrollWheel,hs.eventtap.event.types.flagsChanged}, function(e)
@@ -82,7 +81,8 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "-", function()
 end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "[", function()
 	local screen = hs.screen.mainScreen()
-	screen:setMode(1280, 800, 2.0)
+	-- screen:setMode(1280, 800, 2.0)
+	screen:setMode(1920, 1200, 1.0)
 end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "]", function()
 	local screen = hs.screen.mainScreen()
@@ -219,20 +219,20 @@ end)
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————For GluePrint toggle hidden/automatically focus
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", function()
-	if hs.application.get("GluePrint"):isHidden() then
-        hs.application.get("GluePrint"):unhide()
-		hs.application.get("GluePrint"):activate()
+	if hs.application.get("Pixel Perfect"):isHidden() then
+        hs.application.get("Pixel Perfect"):unhide()
+		hs.application.get("Pixel Perfect"):activate()
     else
-        hs.application.get("GluePrint"):hide()
+        hs.application.get("Pixel Perfect"):hide()
 	end
   end)
 
   hs.hotkey.bind("0", "f16", function()
-	if hs.application.get("GluePrint"):isHidden() then
-        hs.application.get("GluePrint"):unhide()
-		hs.application.get("GluePrint"):activate()
+	if hs.application.get("Pixel Perfect"):isHidden() then
+        hs.application.get("Pixel Perfect"):unhide()
+		hs.application.get("Pixel Perfect"):activate()
     else
-        hs.application.get("GluePrint"):hide()
+        hs.application.get("Pixel Perfect"):hide()
 	end
   end)
 
