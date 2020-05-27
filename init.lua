@@ -24,13 +24,16 @@ require "app-sg"
 local score = 0
 --https://github.com/Hammerspoon/hammerspoon/issues/1690
 function showTodoTask()
-    if not todo_draw then
+	if not todo_draw then
+		
+		local soundobj=hs.sound.getByName('Glass')
+		soundobj:play()
         local mainScreen = hs.screen.mainScreen()
 		local mainRes = mainScreen:fullFrame()
 		score= score +1
         local todo_str = 'Andrew:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color=red, paragraphStyle={alignment="center"}})
-        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-400)/2,1200,300)
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
+        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
         todo_draw = hs.drawing.text(timeframe,todo)
         todo_draw:setLevel(hs.drawing.windowLevels.overlay)
         todo_draw:show()
@@ -46,12 +49,32 @@ hs.hotkey.bind("0", "f19", function()
 	-- hs.eventtap.keyStrokes("<p>")
 	showTodoTask()
 end)
+hs.hotkey.bind("0", "f18", function()
+	if not todo_draw then
+		
+		local soundobj=hs.sound.getByName('Glass')
+		soundobj:play()
+        local mainScreen = hs.screen.mainScreen()
+		local mainRes = mainScreen:fullFrame()
+		score= score +10
+        local todo_str = 'Andrew:  ' .. score
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
+        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
+        todo_draw = hs.drawing.text(timeframe,todo)
+        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
+        todo_draw:show()
+        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
+    else
+        todo_draw:delete()
+        todo_draw=nil
+    end
+end)
 hs.hotkey.bind({"cmd"}, "f19", function()
 	if not todo_draw then
         local mainScreen = hs.screen.mainScreen()
 		local mainRes = mainScreen:fullFrame()
         local todo_str = 'Total:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color=red, paragraphStyle={alignment="center"}})
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color= {hex = "#FF0000", alpha = 1}, paragraphStyle={alignment="center"}})
         local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-400)/2,1200,300)
         todo_draw = hs.drawing.text(timeframe,todo)
         todo_draw:setLevel(hs.drawing.windowLevels.overlay)
@@ -63,7 +86,24 @@ hs.hotkey.bind({"cmd"}, "f19", function()
 end)
 hs.hotkey.bind({"ctrl"}, "f19", function()
 	score=0
-	-- hs.eventtap.keyStrokes("</p>")
+	if not todo_draw then
+		
+		local soundobj=hs.sound.getByName('Glass')
+		soundobj:play()
+        local mainScreen = hs.screen.mainScreen()
+		local mainRes = mainScreen:fullFrame()
+	
+        local todo_str = 'Andrew:  ' .. score
+        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
+        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
+        todo_draw = hs.drawing.text(timeframe,todo)
+        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
+        todo_draw:show()
+        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
+    else
+        todo_draw:delete()
+        todo_draw=nil
+    end
 end)
 
 
@@ -268,21 +308,21 @@ hs.hotkey.bind({"cmd"}, "escape", function()
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————resize window to fit mobile view
-hs.hotkey.bind("0", "f18", function()
+-- hs.hotkey.bind("0", "f18", function()
 	
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local screen = win:screen()
-    local max = screen:frame()
+    -- local win = hs.window.focusedWindow()
+    -- local f = win:frame()
+    -- local screen = win:screen()
+    -- local max = screen:frame()
   
-    f.x = max.x
-    f.y = max.y
-    f.w = 320
-    f.h = max.h/2
-    win:setFrame(f)
+    -- f.x = max.x
+    -- f.y = max.y
+    -- f.w = 320
+    -- f.h = max.h/2
+    -- win:setFrame(f)
 
 
-  end)
+--   end)
 
 
 --———————————————————————————————————————————————————————————————————————————————————————————————————————————————— Add selected word/sentence to Englishbox
