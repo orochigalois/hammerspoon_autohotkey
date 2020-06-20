@@ -7,6 +7,15 @@ require "app-sg"
 -- require "app-cpu"
 
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+-- "f11"
+-- "f12"
+-- {"cmd"}, "f12"
+-- {"ctrl"}, "f12"
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+require "app-andrew"
+
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————readme begin
 --1.{"cmd", "alt", "ctrl"}, C         start 20mins timer
@@ -21,91 +30,14 @@ require "app-sg"
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————readme end
 
 
-local score = 0
---https://github.com/Hammerspoon/hammerspoon/issues/1690
-function showTodoTask()
-	if not todo_draw then
-		
-		local soundobj=hs.sound.getByName('Glass')
-		soundobj:play()
-        local mainScreen = hs.screen.mainScreen()
-		local mainRes = mainScreen:fullFrame()
-		score= score +1
-        local todo_str = 'Andrew:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
-        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
-        todo_draw = hs.drawing.text(timeframe,todo)
-        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
-        todo_draw:show()
-        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
-    else
-        todo_draw:delete()
-        todo_draw=nil
-    end
-end
 
 
-hs.hotkey.bind("0", "f19", function()
-	-- hs.eventtap.keyStrokes("<p>")
-	showTodoTask()
+hs.hotkey.bind("0", "f14", function()
+	hs.eventtap.keyStrokes("<p>")
 end)
-hs.hotkey.bind("0", "f18", function()
-	if not todo_draw then
-		
-		local soundobj=hs.sound.getByName('Glass')
-		soundobj:play()
-        local mainScreen = hs.screen.mainScreen()
-		local mainRes = mainScreen:fullFrame()
-		score= score +10
-        local todo_str = 'Andrew:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
-        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
-        todo_draw = hs.drawing.text(timeframe,todo)
-        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
-        todo_draw:show()
-        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
-    else
-        todo_draw:delete()
-        todo_draw=nil
-    end
+hs.hotkey.bind("0", "f15", function()
+	hs.eventtap.keyStrokes("</p>")
 end)
-hs.hotkey.bind({"cmd"}, "f19", function()
-	if not todo_draw then
-        local mainScreen = hs.screen.mainScreen()
-		local mainRes = mainScreen:fullFrame()
-        local todo_str = 'Total:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=240},color= {hex = "#FF0000", alpha = 1}, paragraphStyle={alignment="center"}})
-        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-400)/2,1200,300)
-        todo_draw = hs.drawing.text(timeframe,todo)
-        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
-        todo_draw:show()
-    else
-        todo_draw:delete()
-        todo_draw=nil
-    end
-end)
-hs.hotkey.bind({"ctrl"}, "f19", function()
-	score=0
-	if not todo_draw then
-		
-		local soundobj=hs.sound.getByName('Glass')
-		soundobj:play()
-        local mainScreen = hs.screen.mainScreen()
-		local mainRes = mainScreen:fullFrame()
-	
-        local todo_str = 'Andrew:  ' .. score
-        local todo = hs.styledtext.new(todo_str,{font={name="Impact",size=120},color = {hex = "#FFFFFF", alpha = 1},backgroundColor= {hex = "#000000", alpha = 0.5}, paragraphStyle={alignment="center"}})
-        local timeframe = hs.geometry.rect((mainRes.w-1200)/2,(mainRes.h-300)/2,1200,200)
-        todo_draw = hs.drawing.text(timeframe,todo)
-        todo_draw:setLevel(hs.drawing.windowLevels.overlay)
-        todo_draw:show()
-        timer = hs.timer.doAfter(3, function() todo_draw:delete() todo_draw=nil end)
-    else
-        todo_draw:delete()
-        todo_draw=nil
-    end
-end)
-
 
 
 
@@ -127,12 +59,13 @@ end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "=", function()
 	local screen = hs.screen.mainScreen()
 	-- screen:setMode(2560, 1440, 1.0)  // for iMac
-	screen:setMode(3840, 2160, 1.0)
+	-- screen:setMode(3840, 2160, 1.0)
+	screen:setMode(2400, 1350, 1.0)
 end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "-", function()
 	local screen = hs.screen.mainScreen()
 	-- screen:setMode(1600, 900, 1.0) // for iMac
-	screen:setMode(1920, 1080, 2.0)
+	screen:setMode(1920, 1080, 1.0)
 end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "[", function()
 	local screen = hs.screen.mainScreen()

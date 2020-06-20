@@ -43,13 +43,6 @@ end)
 
 hs.hotkey.bind({"ctrl"}, "f19", function()
 	
-	local win = hs.window.focusedWindow()
-	local title = win:title()
-	print (title)
-
-	if string.match(title, "Slack") then
-		hs.eventtap.keyStrokes("For sure :)")
-		hs.eventtap.keyStroke({}, "return")
-	end 
+	hs.eventtap.keyStrokes("Thanks so much :) :8")
 
 end)
