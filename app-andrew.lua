@@ -1,7 +1,7 @@
 local score = 0
 
-function play_sound()
-    local soundobj = hs.sound.getByName('Glass')
+function play_sound(sound)
+    local soundobj = hs.sound.getByName(sound)
     soundobj:play()
 end
 
@@ -54,14 +54,14 @@ end
 function score_add_one()
     score = score + 1
     score = math.floor(score)
-    play_sound()
+    play_sound('Glass')
     show_on_screen('Andrew:  ' .. score)
 end
 
 function score_add_ten()
     score = score + 10
     score = math.floor(score)
-    play_sound()
+    play_sound('Submarine')
     show_on_screen('Andrew:  ' .. score)
 end
 
