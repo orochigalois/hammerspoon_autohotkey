@@ -216,11 +216,11 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", function()
   end)
 
   hs.hotkey.bind("0", "f16", function()
-	if hs.application.get("Pixel Perfect"):isHidden() then
-        hs.application.get("Pixel Perfect"):unhide()
-		hs.application.get("Pixel Perfect"):activate()
+	if hs.application.get("GluePrint"):isHidden() then
+        hs.application.get("GluePrint"):unhide()
+		hs.application.get("GluePrint"):activate()
     else
-        hs.application.get("Pixel Perfect"):hide()
+        hs.application.get("GluePrint"):hide()
 	end
   end)
 
