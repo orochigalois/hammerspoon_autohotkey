@@ -54,14 +54,14 @@ end
 function score_add_one()
     score = score + 1
     score = math.floor(score)
-    play_sound('Glass')
+    play_sound('Ping')
     show_on_screen('Andrew:  ' .. score)
 end
 
 function score_add_ten()
     score = score + 10
     score = math.floor(score)
-    play_sound('Submarine')
+    play_sound('Glass')
     show_on_screen('Andrew:  ' .. score)
 end
 
