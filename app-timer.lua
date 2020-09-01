@@ -48,28 +48,28 @@ updateTimer = function()-- {{{1
     updateMenu()
 
 
-    if timeLeft <= 10 then
+    if timeLeft == 10 then
 		
 		script = [[
 					say "five"
 				]]
         ok,result = hs.applescript(script)
     end
-    if timeLeft <= 8 then
+    if timeLeft == 8 then
 		
 		script = [[
 					say "four"
 				]]
         ok,result = hs.applescript(script)
     end
-    if timeLeft <= 6 then
+    if timeLeft == 6 then
 		
 		script = [[
 					say "three"
 				]]
         ok,result = hs.applescript(script)
     end
-    if timeLeft <= 4 then
+    if timeLeft == 4 then
 		
 		script = [[
 					say "two"
@@ -77,7 +77,7 @@ updateTimer = function()-- {{{1
         ok,result = hs.applescript(script)
     end
 
-    if timeLeft <= 2 then
+    if timeLeft == 2 then
 		
 		script = [[
 					say "one"
