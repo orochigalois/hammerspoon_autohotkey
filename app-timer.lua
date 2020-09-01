@@ -46,6 +46,44 @@ updateTimer = function()-- {{{1
     if not isActive then return end
     timeLeft = timeLeft - 1
     updateMenu()
+
+
+    if timeLeft <= 10 then
+		
+		script = [[
+					say "five"
+				]]
+        ok,result = hs.applescript(script)
+    end
+    if timeLeft <= 8 then
+		
+		script = [[
+					say "four"
+				]]
+        ok,result = hs.applescript(script)
+    end
+    if timeLeft <= 6 then
+		
+		script = [[
+					say "three"
+				]]
+        ok,result = hs.applescript(script)
+    end
+    if timeLeft <= 4 then
+		
+		script = [[
+					say "two"
+				]]
+        ok,result = hs.applescript(script)
+    end
+
+    if timeLeft <= 2 then
+		
+		script = [[
+					say "one"
+				]]
+        ok,result = hs.applescript(script)
+    end
     if timeLeft <= 0 then
         stop()
 		
