@@ -14,6 +14,19 @@
 -- end)
 -- eventtapMiddleMouseDown:start()
 
+
+hs.hotkey.bind("0", "padenter", function()
+	local win = hs.window.focusedWindow()
+	local title = win:title()
+	print (title)
+
+	if string.match(title, "Slack") then
+		hs.eventtap.keyStrokes(" :)")
+		hs.eventtap.keyStroke({}, "return")
+	end 
+end)
+
+
 hs.hotkey.bind("0", "f19", function()
 	local win = hs.window.focusedWindow()
 	local title = win:title()
