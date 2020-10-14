@@ -23,6 +23,9 @@ hs.hotkey.bind("0", "padenter", function()
 	if string.match(title, "Slack") then
 		hs.eventtap.keyStrokes(" :)")
 		hs.eventtap.keyStroke({}, "return")
+
+	else
+		hs.eventtap.keyStroke({}, "return")
 	end 
 end)
 
