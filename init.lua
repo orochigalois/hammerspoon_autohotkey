@@ -31,6 +31,15 @@ require "app-andrew"
 
 
 
+hs.hotkey.bind("0", "f19", function()
+	
+	local px = current_selection()
+	hs.eventtap.keyStrokes("rem("..string.sub(px, 1, -3)..")")
+
+
+  end)
+
+
 
 hs.hotkey.bind("0", "f14", function()
 	hs.eventtap.keyStrokes("<p>")
@@ -216,7 +225,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "g", function()
 	end
   end)
 
-  hs.hotkey.bind("0", "`", function()
+  hs.hotkey.bind({"0"}, "`", function()
 	if hs.application.get("GluePrint"):isHidden() then
         hs.application.get("GluePrint"):unhide()
 		hs.application.get("GluePrint"):activate()
