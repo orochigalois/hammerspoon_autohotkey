@@ -33,6 +33,6 @@ else if (t > w)
 WinSet, TransColor, FFFFFF 255, Countdowner
 return
 
-p:: settimer,label,% (a:=!a) ? "off" : "on"
-s:: goto startover
+; p:: settimer,label,% (a:=!a) ? "off" : "on"
+#!^c:: goto startover
 esc:: ExitApp
