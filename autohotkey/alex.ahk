@@ -25,7 +25,7 @@ Gui, Color, black
     {
         ;_____count down position
         position_x := A_ScreenWidth - 200, position_y := A_ScreenHeight - 150
-        Progress, m b fs40 fm12 zh10 CTgreen CWFFFFFF X%position_x% Y%position_y% w160, % SubStr(total,1,2) ":" SubStr(total,3,2), , Countdowner
+        Progress, m b fs40 fm12 zh10 CTgreen CWFFFFFF X%position_x% Y%position_y% w160, % SubStr(total,1,2) ":" SubStr(total,3,2), , Countdowner, Digital-7 Mono
         WinSet, TransColor, FFFFFF, Countdowner
         tick := 0, total_tick := SubStr(total,1,2)*60 + SubStr(total,3,2)
         settimer,quartz,1000
@@ -35,7 +35,7 @@ Gui, Color, black
 quartz:
     ++tick
     if (tick < total_tick)
-        Progress, % 100*(total_tick-tick)/total_tick, % SubStr("00" floor((total_tick-tick)/60),-1) ":" SubStr("00" mod(total_tick-tick,60),-1), , Countdowner
+        Progress, % 100*(total_tick-tick)/total_tick, % SubStr("00" floor((total_tick-tick)/60),-1) ":" SubStr("00" mod(total_tick-tick,60),-1), , Countdowner,Digital-7 Mono
     else if (tick = total_tick)
     {
         Progress, Off
