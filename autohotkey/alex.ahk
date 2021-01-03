@@ -8,7 +8,7 @@ SetWorkingDir, %A_ScriptDir%
 
 3s=0003
 10s=0010
-20min=2030
+20min=2010
 
 total:=20min
 
