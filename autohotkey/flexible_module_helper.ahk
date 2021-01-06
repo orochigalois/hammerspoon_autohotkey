@@ -1,5 +1,5 @@
 ﻿;Must set Project_Theme_Folder beforehand
-Project_Theme_Folder := "C:\Users\fudan\Jimmy\gliders\app\public\wp-content\themes\gliders"
+Project_Theme_Folder := "C:\Users\alex\Jimmy\Gliders\app\public\wp-content\themes\gliders"
 
 Flexible_Folder:= Project_Theme_Folder . "\partials\flexible\"
 Instruction_Folder:= Project_Theme_Folder . "\images\instruction\"
