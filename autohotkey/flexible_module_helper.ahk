@@ -19,8 +19,10 @@ Sleep, 100
 SplashImage, Off
 
 ;Step1 Global variables
-RepeaterLevel := 0
-SpaceRepeater :=""
+gRepeaterLevel := 0
+gSpaceRepeater :=""
+
+gModule_Name:=""
 
 AutoTrim, Off
 Space6 = %A_Space%%A_Space%%A_Space%%A_Space%%A_Space%%A_Space%
@@ -86,6 +88,10 @@ ButtonScreenshot:
         MsgBox "Gdiplus failed to start. Please ensure you have gdiplus on your system"
         ExitApp
     }
+    ;Step0 reset repeater Button
+    gRepeaterLevel := 0
+    gSpaceRepeater :=""
+    GuiControl, Text, Button2 , Repeater
 
     ;Step1 Take a screenshot
     Process, Exist, snippingtool.exe
@@ -105,8 +111,8 @@ ButtonScreenshot:
         Exit
 
     ;Step3 Generate php
-    Module_Name = %Constant_Flexible_Folder%%vSanitized%_section.php
-    FileAppend, <!-- Generate by Flexible Module Helper -->`n, %Module_Name%
+    gModule_Name = %Constant_Flexible_Folder%%vSanitized%_section.php
+    FileAppend, <!-- Generate by Flexible Module Helper -->`n, %gModule_Name%
 
     ;Step4 Take a screenshot then save as png
 
@@ -155,6 +161,8 @@ ButtonScreenshot:
     GuiControl,Enable, Button9
     GuiControl,Enable, Button10
     GuiControl,Enable, Button11
+
+    
 return
 
 ButtonText:
@@ -162,17 +170,24 @@ ButtonText:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%text:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Text`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%text:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Text`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('text'); ?> `n, %gModule_Name%
+
+
+        
     }
     else{
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
-    }
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
 
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %gModule_Name%
+    }
+    
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
 ButtonTrueFalse:
@@ -180,20 +195,30 @@ ButtonTrueFalse:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%true_false:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: True/False`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%true_false:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: True/False`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php if( get_sub_field('true_false') ): ?> `n, %gModule_Name%
+        FileAppend, <?php // do something ?> `n, %gModule_Name%
+        FileAppend, <?php endif; ?> `n, %gModule_Name%
+
+        
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php if( get_sub_field('%vSanitized%') ): ?> `n, %gModule_Name%
+        FileAppend, <?php // do something ?> `n, %gModule_Name%
+        FileAppend, <?php endif; ?> `n, %gModule_Name%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
@@ -202,21 +227,21 @@ ButtonButtonGroup:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%button_group:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Button Group`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: horizontal`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%layout: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%return_format: value`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%choices:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%button_group:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Button Group`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: horizontal`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%layout: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%return_format: value`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%choices:`n, %Constant_FlexContent_File%
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: true_false`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
     }
 
     Gui, ChoicesGui:Add, Text, x20 y20, Choice name:
@@ -231,7 +256,7 @@ return
 ChoicesGuiButtonNext_Choice:
     Gui, Submit, NoHide
     StringUpper, ChoiceNameCap, ChoiceName, T
-    FileAppend, %SpaceRepeater%%Space14%%ChoiceName%:%ChoiceNameCap%`n, %Constant_FlexContent_File%
+    FileAppend, %gSpaceRepeater%%Space14%%ChoiceName%:%ChoiceNameCap%`n, %Constant_FlexContent_File%
     GuiControl,,Edit1, 
     GUI, %_GUI%:Default
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
@@ -242,20 +267,26 @@ ButtonTextArea:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%textarea:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Textarea`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: textarea`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%textarea:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Textarea`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: textarea`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('textarea'); ?>  `n, %gModule_Name%
+
+        
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: textarea`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: textarea`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>  `n, %gModule_Name%
 
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
@@ -265,21 +296,25 @@ ButtonImage:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%image:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Image`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: image`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%image:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Image`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: image`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('image')['url']; ?>  `n, %gModule_Name%
 
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: image`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: image`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('%vSanitized%')['url']; ?>  `n, %gModule_Name%
 
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
@@ -289,19 +324,41 @@ ButtonLink:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%link:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Link`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%link:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Link`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php   `n, %gModule_Name%
+        FileAppend, $link = get_sub_field('link');   `n, %gModule_Name%
+        FileAppend, if( $link ):    `n, %gModule_Name%
+        FileAppend, $link_url = $link['url'];    `n, %gModule_Name%
+        FileAppend, $link_title = $link['title'];    `n, %gModule_Name%
+        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_Name%
+        FileAppend, ?>    `n, %gModule_Name%
+        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_Name%
+        FileAppend, <?php endif; ?>   `n, %gModule_Name%
+        
+        
 
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php   `n, %gModule_Name%
+        FileAppend, $link = get_sub_field('%vSanitized%');   `n, %gModule_Name%
+        FileAppend, if( $link ):    `n, %gModule_Name%
+        FileAppend, $link_url = $link['url'];    `n, %gModule_Name%
+        FileAppend, $link_title = $link['title'];    `n, %gModule_Name%
+        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_Name%
+        FileAppend, ?>    `n, %gModule_Name%
+        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_Name%
+        FileAppend, <?php endif; ?>   `n, %gModule_Name%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
@@ -310,25 +367,31 @@ ButtonWysiwyg:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%wysiwyg:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Wysiwyg`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: wysiwyg`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%tabs: all`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%toolbar: full`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%wysiwyg:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Wysiwyg`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: wysiwyg`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%tabs: all`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%toolbar: full`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('wysiwyg'); ?>    `n, %gModule_Name%
+
+        
 
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: wysiwyg`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%tabs: all`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%toolbar: full`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: wysiwyg`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%tabs: all`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%toolbar: full`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>    `n, %gModule_Name%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
@@ -337,25 +400,30 @@ ButtonSelect(SVG):
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%svg_select:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Svg Select`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: select`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%wrapper_width: 50`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%svg_select:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Svg Select`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: select`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%wrapper_width: 50`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('svg_select') ?>.svg" alt="" />    `n, %gModule_Name%
+        
 
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: select`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%wrapper_width: 50`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: select`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%wrapper_width: 50`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('%vSanitized%') ?>.svg" alt="" />    `n, %gModule_Name%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
@@ -364,28 +432,45 @@ ButtonRepeater:
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
     {
-        FileAppend, %SpaceRepeater%%Space10%repeater:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: Repeater`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: repeater`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%repeater:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Repeater`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: repeater`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php    `n, %gModule_Name%
+        FileAppend, if( have_rows('repeater') ):   `n, %gModule_Name%
+        FileAppend, while ( have_rows('repeater') ) : the_row(); ?>    `n, %gModule_Name%
+        FileAppend, xxxxxxxxxx    `n, %gModule_Name%
+        FileAppend, <?php endwhile;    `n, %gModule_Name%
+        FileAppend, endif;    `n, %gModule_Name%
+        FileAppend, ?>    `n, %gModule_Name%
+        
 
     }
     else
     {
         vSanitized := Sanitize(vFieldName)
-        FileAppend, %SpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%type: repeater`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
-        FileAppend, %SpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: repeater`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php    `n, %gModule_Name%
+        FileAppend, if( have_rows('%vSanitized%') ):   `n, %gModule_Name%
+        FileAppend, while ( have_rows('%vSanitized%') ) : the_row(); ?>    `n, %gModule_Name%
+        FileAppend, xxxxxxxxxx    `n, %gModule_Name%
+        FileAppend, <?php endwhile;    `n, %gModule_Name%
+        FileAppend, endif;    `n, %gModule_Name%
+        FileAppend, ?>    `n, %gModule_Name%
 
     }
 
-    RepeaterLevel+= 1
-    SpaceRepeater = %SpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
+    gRepeaterLevel+= 1
+    gSpaceRepeater = %gSpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
 
-    GuiControl, Text, Button2 , Repeater%RepeaterLevel%
+    GuiControl, Text, Button2 , Repeater%gRepeaterLevel%
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
@@ -394,18 +479,17 @@ ButtonRepeater-1:
     ; Auto scroll to the bottom
     SendMessage, 0x115, 7, 0, Edit1
 
-
-    if(RepeaterLevel>0){
-        RepeaterLevel-= 1
-        SpaceRepeater :=""
-        Loop %RepeaterLevel%
+    if(gRepeaterLevel>0){
+        gRepeaterLevel-= 1
+        gSpaceRepeater :=""
+        Loop %gRepeaterLevel%
         {
-            SpaceRepeater = %SpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
+            gSpaceRepeater = %gSpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
         }
-        if(RepeaterLevel=0)
+        if(gRepeaterLevel=0)
             GuiControl, Text, Button2 , Repeater
         else
-            GuiControl, Text, Button2 , Repeater%RepeaterLevel%
+            GuiControl, Text, Button2 , Repeater%gRepeaterLevel%
     }
 
 return
