@@ -14,8 +14,8 @@ SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
 #Include ./Gdip_All.ahk
 
 ;Step0 Show logo
-SplashImage, jimmyweblogo.png, b1 fs12 cwFFFFFF, Please check Constant_Project_Theme_Folder beforehand
-Sleep, 100
+SplashImage, jimmyweblogo.png, w500 b1 fs12 cwFFFFFF, Make sure setup Constant_Project_Theme_Folder beforehand
+Sleep, 2000
 SplashImage, Off
 
 ;Step1 Global variables
