@@ -22,7 +22,13 @@ SplashImage, Off
 gRepeaterLevel := 0
 gSpaceRepeater :=""
 
-gModule_Name:=""
+gImage_Name:=""
+gModule_File:=""
+
+gFlexibleFileSnapshot:=""
+gModuleFileSnapshot:=""
+
+gStep:=0
 
 AutoTrim, Off
 Space6 = %A_Space%%A_Space%%A_Space%%A_Space%%A_Space%%A_Space%
@@ -74,6 +80,10 @@ Gui, Add, Button, w80 default ys, TrueFalse
 GuiControl,Disable, Button10
 Gui, Add, Button, w80 default, ButtonGroup
 GuiControl,Disable, Button11
+
+Gui, Add, Button, x810 y25 w100 default, UndoLastStep
+GuiControl,Disable, Button12
+
 Gui, Show,, %Constant_FlexContent_File%
 global _GUI := A_DefaultGUI
 
@@ -81,6 +91,9 @@ UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return ; End of auto-execute section. The script is idle until the user does something.
 
 ButtonScreenshot:
+
+    ;Save all in case 'Undo' in the future
+    FileRead, gFlexibleFileSnapshot, %Constant_FlexContent_File%
 
     ; Start gdi+
     If !pToken := Gdip_Startup()
@@ -99,6 +112,7 @@ ButtonScreenshot:
     if status = 0
     {
         RunWait snippingtool.exe /clip
+
     }
 
     pBitmap1 := Gdip_CreateBitmapFromClipboard()
@@ -111,8 +125,8 @@ ButtonScreenshot:
         Exit
 
     ;Step3 Generate php
-    gModule_Name = %Constant_Flexible_Folder%%vSanitized%_section.php
-    FileAppend, <!-- Generate by Flexible Module Helper -->`n, %gModule_Name%
+    gModule_File = %Constant_Flexible_Folder%%vSanitized%_section.php
+    FileAppend, <!-- Generate by Flexible Module Helper -->`n, %gModule_File%
 
     ;Step4 Take a screenshot then save as png
 
@@ -130,9 +144,9 @@ ButtonScreenshot:
 
     Gdip_DrawImage(pGraphics2, pBitmap1, 0, 0, vImgW2, vImgH2, 0, 0, vImgW1, vImgH1)
 
-    Image_Name = %Constant_Instruction_Folder%%vSanitized%_section.png
+    gImage_Name = %Constant_Instruction_Folder%%vSanitized%_section.png
 
-    Gdip_SaveBitmapToFile(pBitmap2, Image_Name)
+    Gdip_SaveBitmapToFile(pBitmap2, gImage_Name)
     Gdip_DeleteGraphics(pGraphics2)
     Gdip_DisposeImage(pBitmap1)
     Gdip_DisposeImage(pBitmap2)
@@ -161,11 +175,41 @@ ButtonScreenshot:
     GuiControl,Enable, Button9
     GuiControl,Enable, Button10
     GuiControl,Enable, Button11
+    GuiControl,Enable, Button12
 
-    
+    gStep=1
+
 return
+ButtonUndoLastStep:
+    if (gStep=2){
+        FileDelete, %Constant_FlexContent_File%
+        FileDelete, %gModule_File%
 
+        FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
+        FileAppend, %gModuleFileSnapshot%, %gModule_File%
+        GuiControl,Disable, Button12
+        gStep=0
+    }
+    else if (gStep=1){
+        
+        FileDelete, %gModule_File%
+        FileDelete, %gImage_Name%
+
+        FileDelete, %Constant_FlexContent_File%
+        FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
+        GuiControl,Disable, Button12
+        gStep=0
+    }else{
+        ;do nothing
+    }
+
+    UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+return
 ButtonText:
+
+    ;Save all in case 'Undo' in the future
+    FileRead, gFlexibleFileSnapshot, %Constant_FlexContent_File%
+    FileRead, gModuleFileSnapshot, %gModule_File%
 
     InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
     if (ErrorLevel or (vFieldName = ""))
@@ -174,10 +218,8 @@ ButtonText:
         FileAppend, %gSpaceRepeater%%Space12%label: Text`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('text'); ?> `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('text'); ?> `n, %gModule_File%
 
-
-        
     }
     else{
         vSanitized := Sanitize(vFieldName)
@@ -185,10 +227,12 @@ ButtonText:
         FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %gModule_File%
     }
-    
+
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonTrueFalse:
 
@@ -201,11 +245,10 @@ ButtonTrueFalse:
         FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php if( get_sub_field('true_false') ): ?> `n, %gModule_Name%
-        FileAppend, <?php // do something ?> `n, %gModule_Name%
-        FileAppend, <?php endif; ?> `n, %gModule_Name%
+        FileAppend, `n<?php if( get_sub_field('true_false') ): ?> `n, %gModule_File%
+            FileAppend, <?php // do something ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
 
-        
     }
     else
     {
@@ -216,11 +259,13 @@ ButtonTrueFalse:
         FileAppend, %gSpaceRepeater%%Space12%ui: true`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%default_value: false`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php if( get_sub_field('%vSanitized%') ): ?> `n, %gModule_Name%
-        FileAppend, <?php // do something ?> `n, %gModule_Name%
-        FileAppend, <?php endif; ?> `n, %gModule_Name%
+        FileAppend, `n<?php if( get_sub_field('%vSanitized%') ): ?> `n, %gModule_File%
+            FileAppend, <?php // do something ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonButtonGroup:
 
@@ -251,6 +296,8 @@ ButtonButtonGroup:
     Gui, ChoicesGui:Show,, Add Choice
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 
 ChoicesGuiButtonNext_Choice:
@@ -273,9 +320,8 @@ ButtonTextArea:
         FileAppend, %gSpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('textarea'); ?>  `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('textarea'); ?>  `n, %gModule_File%
 
-        
     }
     else
     {
@@ -286,10 +332,12 @@ ButtonTextArea:
         FileAppend, %gSpaceRepeater%%Space12%new_lines: br`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%rows: 4`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>  `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>  `n, %gModule_File%
 
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonImage:
 
@@ -302,7 +350,7 @@ ButtonImage:
         FileAppend, %gSpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('image')['url']; ?>  `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('image')['url']; ?>  `n, %gModule_File%
 
     }
     else
@@ -314,10 +362,12 @@ ButtonImage:
         FileAppend, %gSpaceRepeater%%Space12%preview_size: thumbnail`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%max_size: 5 # in MB`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%')['url']; ?>  `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('%vSanitized%')['url']; ?>  `n, %gModule_File%
 
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonLink:
 
@@ -329,17 +379,15 @@ ButtonLink:
         FileAppend, %gSpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php   `n, %gModule_Name%
-        FileAppend, $link = get_sub_field('link');   `n, %gModule_Name%
-        FileAppend, if( $link ):    `n, %gModule_Name%
-        FileAppend, $link_url = $link['url'];    `n, %gModule_Name%
-        FileAppend, $link_title = $link['title'];    `n, %gModule_Name%
-        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_Name%
-        FileAppend, ?>    `n, %gModule_Name%
-        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_Name%
-        FileAppend, <?php endif; ?>   `n, %gModule_Name%
-        
-        
+        FileAppend, `n<?php `n, %gModule_File%
+        FileAppend, $link = get_sub_field('link');   `n, %gModule_File%
+        FileAppend, if( $link ): `n, %gModule_File%
+            FileAppend, $link_url = $link['url'];    `n, %gModule_File%
+        FileAppend, $link_title = $link['title'];    `n, %gModule_File%
+        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_File%
+        FileAppend, ?> `n, %gModule_File%
+        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_File%
+        FileAppend, <?php endif; ?>   `n, %gModule_File%
 
     }
     else
@@ -350,17 +398,19 @@ ButtonLink:
         FileAppend, %gSpaceRepeater%%Space12%type: link`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%return_format: array`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php   `n, %gModule_Name%
-        FileAppend, $link = get_sub_field('%vSanitized%');   `n, %gModule_Name%
-        FileAppend, if( $link ):    `n, %gModule_Name%
-        FileAppend, $link_url = $link['url'];    `n, %gModule_Name%
-        FileAppend, $link_title = $link['title'];    `n, %gModule_Name%
-        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_Name%
-        FileAppend, ?>    `n, %gModule_Name%
-        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_Name%
-        FileAppend, <?php endif; ?>   `n, %gModule_Name%
+        FileAppend, `n<?php `n, %gModule_File%
+        FileAppend, $link = get_sub_field('%vSanitized%');   `n, %gModule_File%
+        FileAppend, if( $link ): `n, %gModule_File%
+            FileAppend, $link_url = $link['url'];    `n, %gModule_File%
+        FileAppend, $link_title = $link['title'];    `n, %gModule_File%
+        FileAppend, $link_target = $link['target'] ? $link['target'] : '_self';    `n, %gModule_File%
+        FileAppend, ?> `n, %gModule_File%
+        FileAppend, <a class="button" href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>"><?php echo esc_html($link_title); ?></a>    `n, %gModule_File%
+        FileAppend, <?php endif; ?>   `n, %gModule_File%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonWysiwyg:
 
@@ -375,9 +425,7 @@ ButtonWysiwyg:
         FileAppend, %gSpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('wysiwyg'); ?>    `n, %gModule_Name%
-
-        
+        FileAppend, `n<?= get_sub_field('wysiwyg'); ?>    `n, %gModule_File%
 
     }
     else
@@ -391,9 +439,11 @@ ButtonWysiwyg:
         FileAppend, %gSpaceRepeater%%Space12%media_upload: true`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%delay: true`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>    `n, %gModule_Name%
+        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>    `n, %gModule_File%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 ButtonSelect(SVG):
 
@@ -408,8 +458,7 @@ ButtonSelect(SVG):
         FileAppend, %gSpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('svg_select') ?>.svg" alt="" />    `n, %gModule_Name%
-        
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('svg_select') ?>.svg" alt="" />    `n, %gModule_File%
 
     }
     else
@@ -423,9 +472,11 @@ ButtonSelect(SVG):
         FileAppend, %gSpaceRepeater%%Space12%wrapper_class: js-icon-selector`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%choices: []`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('%vSanitized%') ?>.svg" alt="" />    `n, %gModule_Name%
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('%vSanitized%') ?>.svg" alt="" />    `n, %gModule_File%
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 
 ButtonRepeater:
@@ -438,14 +489,13 @@ ButtonRepeater:
         FileAppend, %gSpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php    `n, %gModule_Name%
-        FileAppend, if( have_rows('repeater') ):   `n, %gModule_Name%
-        FileAppend, while ( have_rows('repeater') ) : the_row(); ?>    `n, %gModule_Name%
-        FileAppend, xxxxxxxxxx    `n, %gModule_Name%
-        FileAppend, <?php endwhile;    `n, %gModule_Name%
-        FileAppend, endif;    `n, %gModule_Name%
-        FileAppend, ?>    `n, %gModule_Name%
-        
+        FileAppend, `n<?php `n, %gModule_File%
+        FileAppend, if( have_rows('repeater') ): `n, %gModule_File%
+            FileAppend, while ( have_rows('repeater') ) : the_row(); ?>    `n, %gModule_File%
+            FileAppend, xxxxxxxxxx `n, %gModule_File%
+        FileAppend, <?php endwhile;    `n, %gModule_File%
+        FileAppend, endif;    `n, %gModule_File%
+        FileAppend, ?> `n, %gModule_File%
 
     }
     else
@@ -457,13 +507,13 @@ ButtonRepeater:
         FileAppend, %gSpaceRepeater%%Space12%layout: block`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%sub_fields:`n, %Constant_FlexContent_File%
 
-        FileAppend, `n<?php    `n, %gModule_Name%
-        FileAppend, if( have_rows('%vSanitized%') ):   `n, %gModule_Name%
-        FileAppend, while ( have_rows('%vSanitized%') ) : the_row(); ?>    `n, %gModule_Name%
-        FileAppend, xxxxxxxxxx    `n, %gModule_Name%
-        FileAppend, <?php endwhile;    `n, %gModule_Name%
-        FileAppend, endif;    `n, %gModule_Name%
-        FileAppend, ?>    `n, %gModule_Name%
+        FileAppend, `n<?php `n, %gModule_File%
+        FileAppend, if( have_rows('%vSanitized%') ): `n, %gModule_File%
+            FileAppend, while ( have_rows('%vSanitized%') ) : the_row(); ?>    `n, %gModule_File%
+            FileAppend, xxxxxxxxxx `n, %gModule_File%
+        FileAppend, <?php endwhile;    `n, %gModule_File%
+        FileAppend, endif;    `n, %gModule_File%
+        FileAppend, ?> `n, %gModule_File%
 
     }
 
@@ -473,6 +523,8 @@ ButtonRepeater:
     GuiControl, Text, Button2 , Repeater%gRepeaterLevel%
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button12
 return
 
 ButtonRepeater-1:
