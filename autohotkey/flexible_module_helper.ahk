@@ -4,6 +4,8 @@ Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\paintingexperiencenew\app\
 Constant_Flexible_Folder:= Constant_Project_Theme_Folder . "\partials\flexible\"
 Constant_Instruction_Folder:= Constant_Project_Theme_Folder . "\images\instruction\"
 Constant_FlexContent_File:= Constant_Project_Theme_Folder . "\acf-fields\flex-content.acf.yaml"
+Constant_Header:= Constant_Project_Theme_Folder . "\header.php"
+Constant_Footer:= Constant_Project_Theme_Folder . "\footer.php"
 
 #SingleInstance Force
 #NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -15,10 +17,12 @@ SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
 
 ;Step0 Show logo
 SplashImage, jimmyweblogo.png, w500 b1 fs12 cwFFFFFF, Make sure setup Constant_Project_Theme_Folder beforehand
-Sleep, 2000
+Sleep, 200
 SplashImage, Off
 
 ;Step1 Global variables
+
+gWhichFile :=1 ;1 stands for flex-content.acf.yaml / 2 stands for options.acf.yaml
 gRepeaterLevel := 0
 gSpaceRepeater :=""
 
@@ -31,7 +35,9 @@ gModuleFileSnapshot:=""
 gStep:=0
 
 AutoTrim, Off
-Space6 = %A_Space%%A_Space%%A_Space%%A_Space%%A_Space%%A_Space%
+Space2 = %A_Space%%A_Space%
+Space4 = %Space2%%A_Space%%A_Space%
+Space6 = %Space4%%A_Space%%A_Space%
 Space8 = %Space6%%A_Space%%A_Space%
 Space10 = %Space8%%A_Space%%A_Space%
 Space12 = %Space10%%A_Space%%A_Space%
@@ -54,41 +60,60 @@ Sanitize(Str){
 }
 
 ;Step3 Create GUI
-Gui, Add, Text, section, Step1. Take a screenshot of the module:
+
+Gui, Add, Text, section, Step1. Select File:
+
+Gui, Add, Radio, gCheck vRadioGroup1 Checked , flex-content.acf.yaml
+Gui, Add, Radio, gCheck vRadioGroup2, options.acf.yaml
+
+Gui, Add, Text, section, Step2. Take a screenshot of the flexible module:
 Gui, Add, Button, w80 default, Screenshot
-Gui, Add, Text, section, Step2. Prepare flex-content.acf.yaml:
+Gui, Add, Text, section, Step3. Prepare flex-content.acf.yaml:
 Gui, Add, Edit, R40 vFlexContentEdit w900 ReadOnly
 ; FileRead, FileContents, %Constant_FlexContent_File%
 ; GuiControl,, FlexContentEdit, %FileContents%
 Gui, Add, Button, section w80 default , Repeater
-GuiControl,Disable, Button2
-Gui, Add, Button, w80 default, Repeater-1
-GuiControl,Disable, Button3
-Gui, Add, Button, w80 default ys, Text
 GuiControl,Disable, Button4
-Gui, Add, Button, w80 default, Image
+Gui, Add, Button, w80 default, Repeater-1
 GuiControl,Disable, Button5
-Gui, Add, Button, w80 default ys, Link
+Gui, Add, Button, w80 default ys, Text
 GuiControl,Disable, Button6
-Gui, Add, Button, w80 default, Wysiwyg
+Gui, Add, Button, w80 default, Image
 GuiControl,Disable, Button7
-Gui, Add, Button, w80 default ys, Select(SVG)
+Gui, Add, Button, w80 default ys, Link
 GuiControl,Disable, Button8
-Gui, Add, Button, w80 default, TextArea
+Gui, Add, Button, w80 default, Wysiwyg
 GuiControl,Disable, Button9
-Gui, Add, Button, w80 default ys, TrueFalse
+Gui, Add, Button, w80 default ys, Select(SVG)
 GuiControl,Disable, Button10
-Gui, Add, Button, w80 default, ButtonGroup
+Gui, Add, Button, w80 default, TextArea
 GuiControl,Disable, Button11
+Gui, Add, Button, w80 default ys, TrueFalse
+GuiControl,Disable, Button12
+Gui, Add, Button, w80 default, ButtonGroup
+GuiControl,Disable, Button13
 
 Gui, Add, Button, x810 y25 w100 default, UndoLastStep
-GuiControl,Disable, Button12
+GuiControl,Disable, Button14
 
 Gui, Show,, %Constant_FlexContent_File%
 global _GUI := A_DefaultGUI
 
 UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return ; End of auto-execute section. The script is idle until the user does something.
+
+Check:
+    Gui, Submit, NoHide
+    if (RadioGroup1){
+        gWhichFile := 1
+        GuiControl,Enable, Button3
+    }
+    if (RadioGroup2){
+        gWhichFile := 2
+        GuiControl,Disable, Button3
+    }
+
+Return
 
 ButtonScreenshot:
 
@@ -104,7 +129,7 @@ ButtonScreenshot:
     ;Step0 reset repeater Button
     gRepeaterLevel := 0
     gSpaceRepeater :=""
-    GuiControl, Text, Button2 , Repeater
+    GuiControl, Text, Button4 , Repeater
 
     ;Step1 Take a screenshot
     Process, Exist, snippingtool.exe
@@ -165,8 +190,6 @@ ButtonScreenshot:
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 
     ;Step6 enable buttons
-    GuiControl,Enable, Button2
-    GuiControl,Enable, Button3
     GuiControl,Enable, Button4
     GuiControl,Enable, Button5
     GuiControl,Enable, Button6
@@ -176,6 +199,8 @@ ButtonScreenshot:
     GuiControl,Enable, Button10
     GuiControl,Enable, Button11
     GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 
     gStep=1
 
@@ -187,17 +212,17 @@ ButtonUndoLastStep:
 
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
         FileAppend, %gModuleFileSnapshot%, %gModule_File%
-        GuiControl,Disable, Button12
+        GuiControl,Disable, Button14
         gStep=0
     }
     else if (gStep=1){
-        
+
         FileDelete, %gModule_File%
         FileDelete, %gImage_Name%
 
         FileDelete, %Constant_FlexContent_File%
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
-        GuiControl,Disable, Button12
+        GuiControl,Disable, Button14
         gStep=0
     }else{
         ;do nothing
@@ -206,6 +231,31 @@ ButtonUndoLastStep:
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
 return
 ButtonText:
+
+    if(gWhichFile=2){
+        InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
+        if (ErrorLevel or (vFieldName = ""))
+        {
+            FileAppend, %gSpaceRepeater%%Space2%text:`n, %Constant_Options_File%
+            FileAppend, %gSpaceRepeater%%Space4%label: Text`n, %Constant_Options_File%
+            FileAppend, %gSpaceRepeater%%Space4%type: text`n, %Constant_Options_File%
+
+            FileAppend, `n<?= get_sub_field('text'); ?> `n, %Constant_Header%
+            FileAppend, `n<?= get_sub_field('text'); ?> `n, %Constant_Footer%
+
+        }
+        else{
+            vSanitized := Sanitize(vFieldName)
+            FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+            FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+            FileAppend, %gSpaceRepeater%%Space12%type: text`n, %Constant_FlexContent_File%
+
+            FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %Constant_Header%
+            FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %Constant_Footer%
+        }
+
+        UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
+    }
 
     ;Save all in case 'Undo' in the future
     FileRead, gFlexibleFileSnapshot, %Constant_FlexContent_File%
@@ -232,7 +282,7 @@ ButtonText:
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonTrueFalse:
 
@@ -265,7 +315,7 @@ ButtonTrueFalse:
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonButtonGroup:
 
@@ -297,7 +347,7 @@ ButtonButtonGroup:
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 
 ChoicesGuiButtonNext_Choice:
@@ -337,7 +387,7 @@ ButtonTextArea:
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonImage:
 
@@ -367,7 +417,7 @@ ButtonImage:
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonLink:
 
@@ -410,7 +460,7 @@ ButtonLink:
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonWysiwyg:
 
@@ -443,7 +493,7 @@ ButtonWysiwyg:
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 ButtonSelect(SVG):
 
@@ -476,7 +526,7 @@ ButtonSelect(SVG):
     }
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 
 ButtonRepeater:
@@ -520,11 +570,11 @@ ButtonRepeater:
     gRepeaterLevel+= 1
     gSpaceRepeater = %gSpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
 
-    GuiControl, Text, Button2 , Repeater%gRepeaterLevel%
+    GuiControl, Text, Button4 , Repeater%gRepeaterLevel%
 
     UpdateGUI(Constant_FlexContent_File,FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button14
 return
 
 ButtonRepeater-1:
@@ -539,9 +589,9 @@ ButtonRepeater-1:
             gSpaceRepeater = %gSpaceRepeater%%A_Space%%A_Space%%A_Space%%A_Space%
         }
         if(gRepeaterLevel=0)
-            GuiControl, Text, Button2 , Repeater
+            GuiControl, Text, Button4 , Repeater
         else
-            GuiControl, Text, Button2 , Repeater%gRepeaterLevel%
+            GuiControl, Text, Button4 , Repeater%gRepeaterLevel%
     }
 
 return
