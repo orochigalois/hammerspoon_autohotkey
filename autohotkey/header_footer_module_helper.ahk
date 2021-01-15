@@ -74,6 +74,7 @@ Gui, Add, Button, w80 default ys, Select(SVG)
 Gui, Add, Button, w80 default, TextArea
 Gui, Add, Button, w80 default ys, TrueFalse
 Gui, Add, Button, w80 default, ButtonGroup
+Gui, Add, Button, w80 default ys, Tab
 
 
 GuiControl,Disable, Button3
@@ -130,7 +131,7 @@ ButtonText:
         FileAppend, %gSpaceRepeater%%Space4%label: Text`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%type: text`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('text'); ?> `n, %vvFile%
+        FileAppend, `n<?= get_field('text','options'); ?> `n, %vvFile%
     }
     else{
         vSanitized := Sanitize(vFieldName)
@@ -138,7 +139,33 @@ ButtonText:
         FileAppend, %gSpaceRepeater%%Space4%label: %vFieldName%`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%type: text`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?> `n, %vvFile%
+        FileAppend, `n<?= get_field('%vSanitized%','options'); ?> `n, %vvFile%
+    }
+
+    UpdateGUI(FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button3
+return
+ButtonTab:
+    if(gWhichFile=1)
+        vvFile:=Constant_Header_PHP
+    else
+        vvFile:=Constant_Footer_PHP
+    ;Save all in case 'Undo' in the future
+    FileRead, gOptionFileSnapshot, %Constant_Options_File%
+
+    InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
+    if (ErrorLevel or (vFieldName = ""))
+    {
+        FileAppend, %gSpaceRepeater%%Space2%tab:`n, %Constant_Options_File%
+        FileAppend, %gSpaceRepeater%%Space4%label: Tab`n, %Constant_Options_File%
+        FileAppend, %gSpaceRepeater%%Space4%type: tab`n, %Constant_Options_File%
+    }
+    else{
+        vSanitized := Sanitize(vFieldName)
+        FileAppend, %gSpaceRepeater%%Space2%%vSanitized%:`n, %Constant_Options_File%
+        FileAppend, %gSpaceRepeater%%Space4%label: %vFieldName%`n, %Constant_Options_File%
+        FileAppend, %gSpaceRepeater%%Space4%type: tab`n, %Constant_Options_File%
     }
 
     UpdateGUI(FlexContentEdit,Edit1)
@@ -166,7 +193,7 @@ ButtonTrueFalse:
         FileAppend, %gSpaceRepeater%%Space4%ui: true`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%default_value: false`n, %Constant_Options_File%
 
-        FileAppend, `n<?php if( get_sub_field('true_false') ): ?> `n, %vvFile%
+        FileAppend, `n<?php if( get_field('true_false','options') ): ?> `n, %vvFile%
         FileAppend, <?php // do something ?> `n, %vvFile%
         FileAppend, <?php endif; ?> `n, %vvFile%
 
@@ -180,7 +207,7 @@ ButtonTrueFalse:
         FileAppend, %gSpaceRepeater%%Space4%ui: true`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%default_value: false`n, %Constant_Options_File%
 
-        FileAppend, `n<?php if( get_sub_field('%vSanitized%') ): ?> `n, %vvFile%
+        FileAppend, `n<?php if( get_field('%vSanitized%','options') ): ?> `n, %vvFile%
         FileAppend, <?php // do something ?> `n, %vvFile%
         FileAppend, <?php endif; ?> `n, %vvFile%
     }
@@ -261,7 +288,7 @@ ButtonTextArea:
         FileAppend, %gSpaceRepeater%%Space4%new_lines: br`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%rows: 4`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('textarea'); ?>  `n, %gWhichFile%
+        FileAppend, `n<?= get_field('textarea','options'); ?>  `n, %gWhichFile%
 
     }
     else
@@ -273,7 +300,7 @@ ButtonTextArea:
         FileAppend, %gSpaceRepeater%%Space4%new_lines: br`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%rows: 4`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>  `n, %gWhichFile%
+        FileAppend, `n<?= get_field('%vSanitized%','options'); ?>  `n, %gWhichFile%
 
     }
     UpdateGUI(FlexContentEdit,Edit1)
@@ -301,7 +328,7 @@ ButtonImage:
         FileAppend, %gSpaceRepeater%%Space4%preview_size: thumbnail`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%max_size: 5 # in MB`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('image')['url']; ?>  `n, %vvFile%
+        FileAppend, `n<?= get_field('image','options')['url']; ?>  `n, %vvFile%
 
     }
     else
@@ -313,7 +340,7 @@ ButtonImage:
         FileAppend, %gSpaceRepeater%%Space4%preview_size: thumbnail`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%max_size: 5 # in MB`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%')['url']; ?>  `n, %vvFile%
+        FileAppend, `n<?= get_field('%vSanitized%','options')['url']; ?>  `n, %vvFile%
 
     }
     UpdateGUI(FlexContentEdit,Edit1)
@@ -341,7 +368,7 @@ ButtonLink:
         FileAppend, %gSpaceRepeater%%Space4%return_format: array`n, %Constant_Options_File%
 
         FileAppend, `n<?php `n, %vvFile%
-        FileAppend, $link = get_sub_field('link');   `n, %vvFile%
+        FileAppend, $link = get_field('link','options');   `n, %vvFile%
         FileAppend, if( $link ): `n, %vvFile%
             FileAppend, $link_url = $link['url'];    `n, %vvFile%
         FileAppend, $link_title = $link['title'];    `n, %vvFile%
@@ -360,7 +387,7 @@ ButtonLink:
         FileAppend, %gSpaceRepeater%%Space4%return_format: array`n, %Constant_Options_File%
 
         FileAppend, `n<?php `n, %vvFile%
-        FileAppend, $link = get_sub_field('%vSanitized%');   `n, %vvFile%
+        FileAppend, $link = get_field('%vSanitized%','options');   `n, %vvFile%
         FileAppend, if( $link ): `n, %vvFile%
             FileAppend, $link_url = $link['url'];    `n, %vvFile%
         FileAppend, $link_title = $link['title'];    `n, %vvFile%
@@ -396,7 +423,7 @@ ButtonWysiwyg:
         FileAppend, %gSpaceRepeater%%Space4%media_upload: true`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%delay: true`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('wysiwyg'); ?>    `n, %vvFile%
+        FileAppend, `n<?= get_field('wysiwyg','options'); ?>    `n, %vvFile%
 
     }
     else
@@ -410,7 +437,7 @@ ButtonWysiwyg:
         FileAppend, %gSpaceRepeater%%Space4%media_upload: true`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%delay: true`n, %Constant_Options_File%
 
-        FileAppend, `n<?= get_sub_field('%vSanitized%'); ?>    `n, %vvFile%
+        FileAppend, `n<?= get_field('%vSanitized%','options'); ?>    `n, %vvFile%
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
@@ -439,7 +466,7 @@ ButtonSelect(SVG):
         FileAppend, %gSpaceRepeater%%Space4%wrapper_class: js-icon-selector`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%choices: []`n, %Constant_Options_File%
 
-        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('svg_select') ?>.svg" alt="" />    `n, %vvFile%
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_field('svg_select','options') ?>.svg" alt="" />    `n, %vvFile%
 
     }
     else
@@ -453,7 +480,7 @@ ButtonSelect(SVG):
         FileAppend, %gSpaceRepeater%%Space4%wrapper_class: js-icon-selector`n, %Constant_Options_File%
         FileAppend, %gSpaceRepeater%%Space4%choices: []`n, %Constant_Options_File%
 
-        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_sub_field('%vSanitized%') ?>.svg" alt="" />    `n, %vvFile%
+        FileAppend, `n<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/svg/<?= get_field('%vSanitized%','options') ?>.svg" alt="" />    `n, %vvFile%
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
@@ -482,8 +509,8 @@ ButtonRepeater:
         FileAppend, %gSpaceRepeater%%Space4%sub_fields:`n, %Constant_Options_File%
 
         FileAppend, `n<?php `n, %vvFile%
-        FileAppend, if( have_rows('repeater') ): `n, %vvFile%
-            FileAppend, while ( have_rows('repeater') ) : the_row(); ?>    `n, %vvFile%
+        FileAppend, if( have_rows('repeater','options') ): `n, %vvFile%
+            FileAppend, while ( have_rows('repeater','options') ) : the_row(); ?>    `n, %vvFile%
             FileAppend, xxxxxxxxxx `n, %vvFile%
         FileAppend, <?php endwhile;    `n, %vvFile%
         FileAppend, endif;    `n, %vvFile%
@@ -500,8 +527,8 @@ ButtonRepeater:
         FileAppend, %gSpaceRepeater%%Space4%sub_fields:`n, %Constant_Options_File%
 
         FileAppend, `n<?php `n, %vvFile%
-        FileAppend, if( have_rows('%vSanitized%') ): `n, %vvFile%
-            FileAppend, while ( have_rows('%vSanitized%') ) : the_row(); ?>    `n, %vvFile%
+        FileAppend, if( have_rows('%vSanitized%','options') ): `n, %vvFile%
+            FileAppend, while ( have_rows('%vSanitized%','options') ) : the_row(); ?>    `n, %vvFile%
             FileAppend, xxxxxxxxxx `n, %vvFile%
         FileAppend, <?php endwhile;    `n, %vvFile%
         FileAppend, endif;    `n, %vvFile%
