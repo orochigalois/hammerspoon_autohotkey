@@ -50,7 +50,7 @@ UpdateGUI(FlexContentEdit,Edit1) {
 
 Sanitize(Str){
     Str := StrReplace(Str, A_Space, "_")
-    Str := StrReplace(Str, A_Space, "+")
+    Str := StrReplace(Str, "+", "_")
     StringLower, NewStr, Str
     return NewStr
 }
