@@ -1,5 +1,5 @@
 ﻿;Must set Constant_Project_Theme_Folder beforehand
-Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\paintingexperiencenew\app\public\wp-content\themes\paintingexperience"
+Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\cdlplumbdraingas\app\public\wp-content\themes\clpplumbing"
 
 Constant_Flexible_Folder:= Constant_Project_Theme_Folder . "\partials\flexible\"
 Constant_Instruction_Folder:= Constant_Project_Theme_Folder . "\images\instruction\"
