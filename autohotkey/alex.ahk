@@ -107,14 +107,31 @@ return
 
       #!^Numpad7::
          {
-            ; vSelected := GetSelectedText()
-            ; InputBox, vDescription, Vscode Snippet Generator, Please input the label(e.g. "mix_wordpress_ajax"), ,450,130
-           
-            ; MsgBox, %vSelected%
-            A_Clipboard := ""
-            A_Clipboard .= "`'mix_wordpress_ajax`': {"  ; Empty the clipboard.
-            
-            
+            vSelected := GetSelectedText()
+
+            InputBox, vDescription, Vscode Snippet Generator, Please name your snippet(e.g. "mix_wordpress_ajax"), ,450,130
+
+            clipboard := ""
+            clipboard = %clipboard%"%vDescription%": {`n
+
+               clipboard = %clipboard% "prefix": "%vDescription%",`n
+               clipboard = %clipboard% "body": [`n
+               Loop, Parse, vSelected, `n
+               {
+                  New_LoopField := StrReplace(A_LoopField, "`r")
+                  New_LoopField := StrReplace(New_LoopField, "`n")
+                  New_LoopField := StrReplace(New_LoopField, "`r`n")
+
+                  New_LoopField := StrReplace(New_LoopField, "\","\\")
+                  New_LoopField := StrReplace(New_LoopField, """","\""")
+                  New_LoopField := StrReplace(New_LoopField, "$","\\$")
+                  if (New_LoopField != "")
+                     clipboard = %clipboard%   "%New_LoopField%",`n
+               }
+               clipboard = %clipboard% ],`n
+               clipboard = %clipboard% "description": "%vDescription%"`n
+            clipboard = %clipboard%}`n
+
             return
          }
 
