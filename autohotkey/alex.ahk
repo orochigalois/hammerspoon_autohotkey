@@ -1,4 +1,7 @@
-﻿#SingleInstance, Force
+﻿Constant_Code_Snippets_Folder := "C:\Users\fudan\AppData\Roaming\Code\User\snippets"
+
+
+#SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
@@ -103,19 +106,46 @@ return
          SendRaw, display:none !important; `n
          return
       }
+#!^Numpad6::
+   {
+      ; FileSelectFile, SelectedFile, 3, %Constant_Code_Snippets_Folder% , Open a file, Code Snippets (*.code-snippets)
+      ; if (SelectedFile = "")
+      ;    MsgBox, The user didn't select anything.
+      ; else{
+      ;    SplitPath, SelectedFile , , , , name_no_ext, 
+      ;    MsgBox, The user selected the following:`n%name_no_ext%
+      ; }
+         
+      ; return
+   }
+      
       ;vscode_snippet_generator
 
       #!^Numpad7::
          {
+            ;Step1. save selected code block
             vSelected := GetSelectedText()
 
-            InputBox, vDescription, Vscode Snippet Generator, Please name your snippet(e.g. "mix_wordpress_ajax"), ,450,130
+            ;Step2. select snippet file 
+            FileSelectFile, vSelectedFile, 3, %Constant_Code_Snippets_Folder% , Open a file, Code Snippets (*.code-snippets)
+            if (vSelectedFile = "")
+               return
+            
 
-            clipboard := ""
-            clipboard = %clipboard%"%vDescription%": {`n
+            SplitPath, vSelectedFile , , , , name_no_ext, 
 
-               clipboard = %clipboard% "prefix": "%vDescription%",`n
-               clipboard = %clipboard% "body": [`n
+            ;Step3. name your snippet
+            InputBox, vDescription, Vscode Snippet Generator, Please name your snippet(e.g. "wordpress_ajax"), ,450,130
+
+            ;Step4. calculate final snippet name
+            vFinalFileName = %name_no_ext%_%vDescription%
+
+            ;Step5. calculate final snippet
+            vSnippet := ",`n"
+            vSnippet = %vSnippet%"%vFinalFileName%": {`n
+
+               vSnippet = %vSnippet% "prefix": "%vFinalFileName%",`n
+               vSnippet = %vSnippet% "body": [`n
                Loop, Parse, vSelected, `n
                {
                   New_LoopField := StrReplace(A_LoopField, "`r")
@@ -126,12 +156,21 @@ return
                   New_LoopField := StrReplace(New_LoopField, """","\""")
                   New_LoopField := StrReplace(New_LoopField, "$","\\$")
                   if (New_LoopField != "")
-                     clipboard = %clipboard%   "%New_LoopField%",`n
+                     vSnippet = %vSnippet%   "%New_LoopField%",`n
                }
-               clipboard = %clipboard% ],`n
-               clipboard = %clipboard% "description": "%vDescription%"`n
-            clipboard = %clipboard%}`n
+               vSnippet = %vSnippet% ],`n
+               vSnippet = %vSnippet% "description": "%vFinalFileName%"`n
+            vSnippet = %vSnippet%}`n
+            vSnippet = %vSnippet%`n}
 
+
+            ;Step6. write to snippet file
+
+            FileRead, vFileContents, %vSelectedFile%
+            StringTrimRight, vFileContents, vFileContents, 1
+            FileDelete, %vSelectedFile%
+            FileAppend, %vFileContents%, %vSelectedFile%
+            FileAppend, %vSnippet%, %vSelectedFile%
             return
          }
 
