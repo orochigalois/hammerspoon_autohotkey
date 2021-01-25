@@ -309,7 +309,7 @@ Sleep, 200
 ToLeft()
 WinActivate
             return
-;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows
+;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows, F19 doesn't use
          ExtractAppTitle(FullTitle)
          {	
             AppTitle := SubStr(FullTitle, InStr(FullTitle, " ", false, -1) + 1)
