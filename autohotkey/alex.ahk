@@ -1,6 +1,9 @@
-﻿Constant_Code_Snippets_Folder := "C:\Users\fudan\AppData\Roaming\Code\User\snippets"
+﻿;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Constant
+;Constant_Code_Snippets_Folder := "C:\Users\fudan\AppData\Roaming\Code\User\snippets"
+Constant_Code_Snippets_Folder := "C:\Users\alex\AppData\Roaming\Code\User\snippets"
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Init Setting
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
@@ -67,12 +70,12 @@ return
       return
    }
 
-   ;;;;;;;;;;;;;;;;;;;;;For MacOS, there are issues for those keymap, so we have to install SharpKeys instead
+;;;;;;;;;;;;;;;;;;;;;For MacOS, there are issues for those keymap, so we have to install SharpKeys instead
    ; LAlt::LCtrl
    ; LWin::LAlt
    ; LCtrl::LWin
 
-   ;;;;;;;;;;;;;;;;;;;;;for vscode
+;;;;;;;;;;;;;;;;;;;;;for vscode
 #!^Numpad1::
    {
       SendRaw, <?php ?>
@@ -184,7 +187,7 @@ return
             SendRaw, </p>
             return
          }
-         ;;;;;;;;;;;;;;;;;;;;;for English dict
+;;;;;;;;;;;;;;;;;;;;;for English dict
       #!^5::
          {
             Send, ^c
@@ -200,27 +203,27 @@ return
             return
          }
 
-         ;;;;;;;;;;;;;;;;;;;;;delete
+;;;;;;;;;;;;;;;;;;;;;delete
       ^Backspace::
          {
             Send, {Delete};
             return
          }
-         ;;;;;;;;;;;;;;;;;;;;;minimize/hide window
+;;;;;;;;;;;;;;;;;;;;;minimize/hide window
       ^H::
          {
             WinMinimize, A
             return
          }
 
-         ;;;;;;;;;;;;;;;;;;;;;close window
+;;;;;;;;;;;;;;;;;;;;;close window
       ^Q::
          {
             WinClose A
             return
          }
 
-         ;;;;;;;;;;;;;;;;;;;;;for design
+;;;;;;;;;;;;;;;;;;;;;for design
       `::
          {
 
@@ -244,7 +247,7 @@ return
             }
             Return
          }
-         ;;;;;;;;;;;;;;cursor color copy to clipboard
+;;;;;;;;;;;;;;cursor color copy to clipboard
 
       ^F1::
          MouseGetPos, MouseX, MouseY
@@ -252,7 +255,7 @@ return
          clipboard = %color%
       return
 
-      ;;;;;;;;;;;;;;;;;;;;;screen shot, known issues on multiple monitors
+;;;;;;;;;;;;;;;;;;;;;screen shot, known issues on multiple monitors
       ^Escape::	; <-- Open/Activate/Minimize Windows Snipping Tool
          {
             SetTitleMatchMode, % (Setting_A_TitleMatchMode := A_TitleMatchMode) ? "RegEx" :
@@ -294,15 +297,26 @@ return
                SetTitleMatchMode, %Setting_A_TitleMatchMode%
             return
          }
+;;;;;;;;;;;;;;;;;;;;;For mouse middle, divide 2 screens
 
-         ;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows
+
+
+MButton::
+ToRight()
+WinActivate
+Send, !{Esc}
+Sleep, 200
+ToLeft()
+WinActivate
+            return
+;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows
          ExtractAppTitle(FullTitle)
          {	
             AppTitle := SubStr(FullTitle, InStr(FullTitle, " ", false, -1) + 1)
             Return AppTitle
          }
 
-         MButton::
+         F19::
             WinGet, ActiveProcess, ProcessName, A
             WinGet, OpenWindowsAmount, Count, ahk_exe %ActiveProcess%
 
