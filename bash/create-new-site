@@ -1,0 +1,54 @@
+#!/bin/bash
+
+echo -e "Step1. Create config file under /etc/httpd/sites-enabled \n"
+echo -e "<VirtualHost *:80>\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "ServerName $1.jimmystage2.com\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "DocumentRoot /mnt/volume_sgp1_03/$1.jimmystage2.com/html\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "<Directory \"/mnt/volume_sgp1_03/$1.jimmystage2.com/html\">\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "AllowOverride All\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Options Indexes FollowSymLinks\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "AuthType Basic\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "AuthName \"Authorized personnel only.\"\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "AuthUserFile /var/.jimmywebpass\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Require valid-user\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Order Deny,Allow\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Deny from all\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Allow from 203.219.232.158\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Allow from 110.143.200.96\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Allow from 203.206.217.123\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Allow from 220.233.16.176\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "Satisfy Any\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "</Directory>\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "ErrorLog /mnt/volume_sgp1_03/$1.jimmystage2.com/log/error.log\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "CustomLog /mnt/volume_sgp1_03/$1.jimmystage2.com/log/requests.log combined\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+echo -e "</VirtualHost>\n" >> /etc/httpd/sites-enabled/$1.jimmystage2.com.conf
+
+
+
+echo -e "Step2. Create site folder under /var/sites/ \n"
+mkdir /var/sites/$1.jimmystage2.com
+mkdir /var/sites/$1.jimmystage2.com/html
+mkdir /var/sites/$1.jimmystage2.com/log
+
+
+
+echo -e "Step3. Change owner of the site folder \n"
+sudo chown -R alex /var/sites/$1.jimmystage2.com
+
+
+echo -e "Step4. Restart apache \n"
+systemctl restart httpd.service
+
+
+echo -e "Step5. Create new database \n"
+
+
+echo -e "Step6. Create new database user \n"
+
+
+echo -e "Step7. update table wp-options  \n"
+echo -e "Step7. update wp-config.php  \n"
+
+
+CREATE USER 'kingsfordhomestead'@'%' IDENTIFIED BY 'Gbc12356789$';
+GRANT ALL PRIVILEGES ON kingsfordhomestead.* TO 'kingsfordhomestead'@'%';

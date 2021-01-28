@@ -302,13 +302,18 @@ return
 
 
 MButton::
-ToRight()
-WinActivate
-Send, !{Esc}
-Sleep, 200
-ToLeft()
-WinActivate
-            return
+      ; WinGet, WindowList, List
+      ; Loop, %WindowList%
+      ; {
+      ;    WinMinimize, % "ahk_id " . WindowList%A_Index%
+      ; }
+      ToRight()
+      WinActivate
+      Send, !{Esc}
+      Sleep, 200
+      ToLeft()
+      WinActivate
+return
 ;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows, F19 doesn't use
          ExtractAppTitle(FullTitle)
          {	
