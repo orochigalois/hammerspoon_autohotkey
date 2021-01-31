@@ -312,6 +312,8 @@ MButton::
       Send, !{Esc}
       Sleep, 200
       ToLeft()
+      Send, +!{Esc}
+      Sleep, 200
       WinActivate
 return
 ;;;;;;;;;;;;;;;;;;;;;For mouse middle, switch with multiple windows, F19 doesn't use
