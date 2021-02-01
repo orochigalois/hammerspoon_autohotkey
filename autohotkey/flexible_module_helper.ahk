@@ -1,9 +1,11 @@
 ﻿;Must set Constant_Project_Theme_Folder beforehand
-Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\kingsfordhomestead\app\public\wp-content\themes\kingsfordhomestead"
+Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\sitandmove\app\public\wp-content\themes\sitandmove"
 
 Constant_Flexible_Folder:= Constant_Project_Theme_Folder . "\partials\flexible\"
+Constant_Scss_Folder:= Constant_Project_Theme_Folder . "\scss\modules\"
 Constant_Instruction_Folder:= Constant_Project_Theme_Folder . "\images\instruction\"
 Constant_FlexContent_File:= Constant_Project_Theme_Folder . "\acf-fields\flex-content.acf.yaml"
+Constant_AppScss_File:= Constant_Project_Theme_Folder . "\scss\app.scss"
 
 #SingleInstance Force
 #NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -31,7 +33,10 @@ gModuleFileSnapshot:=""
 gStep:=0
 
 AutoTrim, Off
-Space6 = %A_Space%%A_Space%%A_Space%%A_Space%%A_Space%%A_Space%
+
+Space2 = %A_Space%%A_Space%
+Space4 = %Space2%%A_Space%%A_Space%
+Space6 = %Space4%%A_Space%%A_Space%
 Space8 = %Space6%%A_Space%%A_Space%
 Space10 = %Space8%%A_Space%%A_Space%
 Space12 = %Space10%%A_Space%%A_Space%
@@ -81,9 +86,11 @@ Gui, Add, Button, w80 default ys, TrueFalse
 GuiControl,Disable, Button10
 Gui, Add, Button, w80 default, ButtonGroup
 GuiControl,Disable, Button11
+Gui, Add, Button, w80 default ys, ColorPicker
+GuiControl,Disable, Button12
 
 Gui, Add, Button, x810 y25 w100 default, UndoLastStep
-GuiControl,Disable, Button12
+GuiControl,Disable, Button13
 
 Gui, Show,, Current file: %Constant_FlexContent_File%
 global _GUI := A_DefaultGUI
@@ -128,6 +135,17 @@ ButtonScreenshot:
     ;Step3 Generate php
     gModule_File = %Constant_Flexible_Folder%%vSanitized%_section.php
     FileAppend, <!-- Generate by Flexible Module Helper -->`n, %gModule_File%
+    FileAppend, <section class="%vSanitized%_section">`n, %gModule_File%
+    FileAppend, %Space2%<div class="row">`n, %gModule_File%
+    FileAppend, %Space4%<div class="col-lg-6">`n, %gModule_File%
+    FileAppend, %Space4%</div>`n, %gModule_File%
+    FileAppend, %Space4%<div class="col-lg-6">`n, %gModule_File%
+    FileAppend, %Space4%</div>`n, %gModule_File%
+    FileAppend, %Space2%</div>`n, %gModule_File%
+    FileAppend, </section>`n, %gModule_File%
+
+
+
 
     ;Step4 Take a screenshot then save as png
 
@@ -165,7 +183,16 @@ ButtonScreenshot:
     FileAppend, %Space12%message: <a href="`%`%THEME_INSTRUCTION_FOLDER`%`%%vSanitized%_section.png" data-lity>Demo Preview</a>`n, %Constant_FlexContent_File%
     UpdateGUI(FlexContentEdit,Edit1)
 
-    ;Step6 enable buttons
+    ;Step6 write to app.scss
+    @import "modules/%vSanitized%";`n, %Constant_AppScss_File%
+
+    ;Step7 create module scss
+    vScssFile = %Constant_Scss_Folder%_%vSanitized%.scss
+    FileAppend, .%vSanitized%_section{`n, %vScssFile%
+    FileAppend, `n, %vScssFile%
+    FileAppend, }`n, %vScssFile%
+
+    ;Step8 enable buttons
     GuiControl,Enable, Button2
     GuiControl,Enable, Button3
     GuiControl,Enable, Button4
@@ -177,6 +204,7 @@ ButtonScreenshot:
     GuiControl,Enable, Button10
     GuiControl,Enable, Button11
     GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 
     gStep=1
 
@@ -188,7 +216,7 @@ ButtonUndoLastStep:
 
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
         FileAppend, %gModuleFileSnapshot%, %gModule_File%
-        GuiControl,Disable, Button12
+        GuiControl,Disable, Button13
         gStep=0
     }
     else if (gStep=1){
@@ -198,7 +226,7 @@ ButtonUndoLastStep:
 
         FileDelete, %Constant_FlexContent_File%
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
-        GuiControl,Disable, Button12
+        GuiControl,Disable, Button13
         gStep=0
     }else{
         ;do nothing
@@ -233,7 +261,7 @@ ButtonText:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 ButtonTrueFalse:
 
@@ -270,8 +298,49 @@ ButtonTrueFalse:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
+
+ButtonColorPicker:
+
+;Save all in case 'Undo' in the future
+    FileRead, gFlexibleFileSnapshot, %Constant_FlexContent_File%
+    FileRead, gModuleFileSnapshot, %gModule_File%
+
+    InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
+    if (ErrorLevel or (vFieldName = ""))
+    {
+        FileAppend, %gSpaceRepeater%%Space10%color_picker:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Color Picker`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: color_picker`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%default_value: #FFFFFF`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php if( get_sub_field('color_picker') ): ?> `n, %gModule_File%
+            FileAppend, <?php $bg_color= get_sub_field('color_picker'); ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
+        FileAppend, <section style="background-color: <?= $bg_color; ?>;"> `n, %gModule_File%
+        
+
+    }
+    else
+    {
+        vSanitized := Sanitize(vFieldName)
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: color_picker`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%default_value: #FFFFFF`n, %Constant_FlexContent_File%
+
+        FileAppend, `n<?php if( get_sub_field('%vSanitized%') ): ?> `n, %gModule_File%
+            FileAppend, <?php $bg_color= get_sub_field('%vSanitized%'); ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
+        FileAppend, <section style="background-color: <?= $bg_color; ?>;"> `n, %gModule_File%
+    }
+    UpdateGUI(FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button13
+return
+
+
 ButtonButtonGroup:
 
     ;Save all in case 'Undo' in the future
@@ -306,7 +375,7 @@ ButtonButtonGroup:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 
 ChoicesGuiButtonNext_Choice:
@@ -349,7 +418,7 @@ ButtonTextArea:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 ButtonImage:
     ;Save all in case 'Undo' in the future
@@ -382,7 +451,7 @@ ButtonImage:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 ButtonLink:
     ;Save all in case 'Undo' in the future
@@ -428,7 +497,7 @@ ButtonLink:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 ButtonWysiwyg:
     ;Save all in case 'Undo' in the future
@@ -464,7 +533,7 @@ ButtonWysiwyg:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 ButtonSelect(SVG):
     ;Save all in case 'Undo' in the future
@@ -500,7 +569,7 @@ ButtonSelect(SVG):
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 
 ButtonRepeater:
@@ -552,7 +621,7 @@ ButtonRepeater:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button12
+    GuiControl,Enable, Button13
 return
 
 ButtonRepeater-1:
