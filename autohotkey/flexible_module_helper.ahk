@@ -88,9 +88,11 @@ Gui, Add, Button, w80 default, ButtonGroup
 GuiControl,Disable, Button11
 Gui, Add, Button, w80 default ys, ColorPicker
 GuiControl,Disable, Button12
+Gui, Add, Button, w80 default, Relationship
+GuiControl,Disable, Button13
 
 Gui, Add, Button, x810 y25 w100 default, UndoLastStep
-GuiControl,Disable, Button13
+GuiControl,Disable, Button14
 
 Gui, Show,, Current file: %Constant_FlexContent_File%
 global _GUI := A_DefaultGUI
@@ -136,10 +138,12 @@ ButtonScreenshot:
     gModule_File = %Constant_Flexible_Folder%%vSanitized%_section.php
     FileAppend, <!-- Generate by Flexible Module Helper -->`n, %gModule_File%
     FileAppend, <section class="%vSanitized%_section">`n, %gModule_File%
-    FileAppend, %Space2%<div class="row">`n, %gModule_File%
-    FileAppend, %Space4%<div class="col-lg-6">`n, %gModule_File%
-    FileAppend, %Space4%</div>`n, %gModule_File%
-    FileAppend, %Space4%<div class="col-lg-6">`n, %gModule_File%
+    FileAppend, %Space2%<div class="container container-fluid">`n, %gModule_File%
+    FileAppend, %Space4%<div class="row">`n, %gModule_File%
+    FileAppend, %Space6%<div class="col-lg-6">`n, %gModule_File%
+    FileAppend, %Space6%</div>`n, %gModule_File%
+    FileAppend, %Space6%<div class="col-lg-6">`n, %gModule_File%
+    FileAppend, %Space6%</div>`n, %gModule_File%
     FileAppend, %Space4%</div>`n, %gModule_File%
     FileAppend, %Space2%</div>`n, %gModule_File%
     FileAppend, </section>`n, %gModule_File%
@@ -184,7 +188,7 @@ ButtonScreenshot:
     UpdateGUI(FlexContentEdit,Edit1)
 
     ;Step6 write to app.scss
-    @import "modules/%vSanitized%";`n, %Constant_AppScss_File%
+    FileAppend, @import "modules/%vSanitized%";`n, %Constant_AppScss_File%
 
     ;Step7 create module scss
     vScssFile = %Constant_Scss_Folder%_%vSanitized%.scss
@@ -205,6 +209,7 @@ ButtonScreenshot:
     GuiControl,Enable, Button11
     GuiControl,Enable, Button12
     GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 
     gStep=1
 
@@ -216,7 +221,7 @@ ButtonUndoLastStep:
 
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
         FileAppend, %gModuleFileSnapshot%, %gModule_File%
-        GuiControl,Disable, Button13
+        GuiControl,Disable, Button14
         gStep=0
     }
     else if (gStep=1){
@@ -226,7 +231,7 @@ ButtonUndoLastStep:
 
         FileDelete, %Constant_FlexContent_File%
         FileAppend, %gFlexibleFileSnapshot%, %Constant_FlexContent_File%
-        GuiControl,Disable, Button13
+        GuiControl,Disable, Button14
         gStep=0
     }else{
         ;do nothing
@@ -261,7 +266,7 @@ ButtonText:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 ButtonTrueFalse:
 
@@ -298,7 +303,73 @@ ButtonTrueFalse:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
+return
+ButtonRelationship:
+
+    ;Save all in case 'Undo' in the future
+    FileRead, gFlexibleFileSnapshot, %Constant_FlexContent_File%
+    FileRead, gModuleFileSnapshot, %gModule_File%
+
+    InputBox, vFieldName, Field Name, Please enter field's name(leave it blank as default name), , ,130
+    if (ErrorLevel or (vFieldName = ""))
+    {
+        FileAppend, %gSpaceRepeater%%Space10%posts:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: Posts`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: relationship`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%# instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%post_type:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'post'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%filters:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'search'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'taxonomy'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%elements`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'featured_image'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%min: 1`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%max: 3`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%return_format: 'object'`n, %Constant_FlexContent_File%
+
+
+
+
+        FileAppend, `n<?php $post_objects = get_sub_field('posts'); ?> `n, %gModule_File%
+        FileAppend, <?php if ($post_objects): ?> `n, %gModule_File%
+        FileAppend, <?php foreach ($post_objects as $post_object) : ?> `n, %gModule_File%
+        FileAppend, <?php endforeach; ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
+
+    }
+    else
+    {
+        vSanitized := Sanitize(vFieldName)
+
+        FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%type: relationship`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%# instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%post_type:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'post'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%filters:`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'search'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'taxonomy'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%elements`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space14%- 'featured_image'`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%min: 1`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%max: 3`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%return_format: 'object'`n, %Constant_FlexContent_File%
+
+
+
+
+        FileAppend, `n<?php $post_objects = get_sub_field('%vSanitized%'); ?> `n, %gModule_File%
+        FileAppend, <?php if ($post_objects): ?> `n, %gModule_File%
+        FileAppend, <?php foreach ($post_objects as $post_object) : ?> `n, %gModule_File%
+        FileAppend, <?php endforeach; ?> `n, %gModule_File%
+        FileAppend, <?php endif; ?> `n, %gModule_File%
+    }
+    UpdateGUI(FlexContentEdit,Edit1)
+    gStep=2
+    GuiControl,Enable, Button14
 return
 
 ButtonColorPicker:
@@ -337,7 +408,7 @@ ButtonColorPicker:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 
 
@@ -375,7 +446,7 @@ ButtonButtonGroup:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 
 ChoicesGuiButtonNext_Choice:
@@ -418,7 +489,7 @@ ButtonTextArea:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 ButtonImage:
     ;Save all in case 'Undo' in the future
@@ -451,7 +522,7 @@ ButtonImage:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 ButtonLink:
     ;Save all in case 'Undo' in the future
@@ -497,7 +568,7 @@ ButtonLink:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 ButtonWysiwyg:
     ;Save all in case 'Undo' in the future
@@ -533,7 +604,7 @@ ButtonWysiwyg:
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 ButtonSelect(SVG):
     ;Save all in case 'Undo' in the future
@@ -569,7 +640,7 @@ ButtonSelect(SVG):
     }
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 
 ButtonRepeater:
@@ -621,7 +692,7 @@ ButtonRepeater:
 
     UpdateGUI(FlexContentEdit,Edit1)
     gStep=2
-    GuiControl,Enable, Button13
+    GuiControl,Enable, Button14
 return
 
 ButtonRepeater-1:

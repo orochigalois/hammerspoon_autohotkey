@@ -105,21 +105,13 @@ return
    }
 #!^Numpad5::
    {
-      SendRaw, @include media-breakpoint-down(sm) { `n
-         SendRaw, display:none !important; `n
+      SendRaw, @media only screen and (max-width: 600px) { `n
          return
       }
 #!^Numpad6::
    {
-      ; FileSelectFile, SelectedFile, 3, %Constant_Code_Snippets_Folder% , Open a file, Code Snippets (*.code-snippets)
-      ; if (SelectedFile = "")
-      ;    MsgBox, The user didn't select anything.
-      ; else{
-      ;    SplitPath, SelectedFile , , , , name_no_ext, 
-      ;    MsgBox, The user selected the following:`n%name_no_ext%
-      ; }
-         
-      ; return
+      SendRaw, @include media-breakpoint-down(sm) { `n
+      return
    }
       
       ;vscode_snippet_generator
