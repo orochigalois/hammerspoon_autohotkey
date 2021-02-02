@@ -317,7 +317,7 @@ ButtonRelationship:
         FileAppend, %gSpaceRepeater%%Space10%posts:`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%label: Posts`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%type: relationship`n, %Constant_FlexContent_File%
-        FileAppend, %gSpaceRepeater%%Space12%# instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%post_type:`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space14%- 'post'`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%filters:`n, %Constant_FlexContent_File%
@@ -325,7 +325,7 @@ ButtonRelationship:
         FileAppend, %gSpaceRepeater%%Space14%- 'taxonomy'`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%elements`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space14%- 'featured_image'`n, %Constant_FlexContent_File%
-        FileAppend, %gSpaceRepeater%%Space12%min: 1`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%min: 0`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%max: 3`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%return_format: 'object'`n, %Constant_FlexContent_File%
 
@@ -346,7 +346,7 @@ ButtonRelationship:
         FileAppend, %gSpaceRepeater%%Space10%%vSanitized%:`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%label: %vFieldName%`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%type: relationship`n, %Constant_FlexContent_File%
-        FileAppend, %gSpaceRepeater%%Space12%# instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%instructions: Leaving this field blank will show the latest 3 posts automatically`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%post_type:`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space14%- 'post'`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%filters:`n, %Constant_FlexContent_File%
@@ -354,7 +354,7 @@ ButtonRelationship:
         FileAppend, %gSpaceRepeater%%Space14%- 'taxonomy'`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%elements`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space14%- 'featured_image'`n, %Constant_FlexContent_File%
-        FileAppend, %gSpaceRepeater%%Space12%min: 1`n, %Constant_FlexContent_File%
+        FileAppend, %gSpaceRepeater%%Space12%min: 0`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%max: 3`n, %Constant_FlexContent_File%
         FileAppend, %gSpaceRepeater%%Space12%return_format: 'object'`n, %Constant_FlexContent_File%
 
