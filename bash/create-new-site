@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #This script can push a local wordpress site to jimmyweb staging automatically
+echo -e "Step00. Notice mysql-opts is an important file to store mysql user&password \n"
 echo -e "Step01. Name your site(e.g. xxx), prepare xxx.zip(don't zip the folder) & xxx.sql, upload to /home/alex/ via ftp \n"
 echo -e "Step02. Ssh to server (uesr alex) \n"
 echo -e "Step03. Make sure you run 'sudo -s' first \n"
