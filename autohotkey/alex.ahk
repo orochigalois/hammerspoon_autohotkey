@@ -78,7 +78,9 @@ return
 ;;;;;;;;;;;;;;;;;;;;;for vscode
 #!^Numpad1::
    {
-      SendRaw, <?php ?>
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, <?php ?>
       Loop 3{
          Send {Left}
       }
@@ -87,7 +89,9 @@ return
    }
 #!^Numpad2::
    {
-      SendRaw, <?= ?>
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, <?= ?>
       Loop 3{
          Send {Left}
       }
@@ -95,22 +99,30 @@ return
    }
 #!^Numpad3::
    {
-      SendRaw, <?php if(false): ?>
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, <?php if(false): ?>
          return
    }
 #!^Numpad4::
    {
-      SendRaw, <?php endif; ?>
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, <?php endif; ?>
       return
    }
 #!^Numpad5::
    {
-      SendRaw, @media only screen and (max-width: 600px) { `n
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, @media only screen and (max-width: 600px) { `n
          return
       }
 #!^Numpad6::
    {
-      SendRaw, @include media-breakpoint-down(sm) { `n
+      
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, @include media-breakpoint-down(sm) { `n
       return
    }
       
@@ -171,12 +183,31 @@ return
 
       #!^Numpad8::
          {
-            SendRaw, <p>
+            
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, <p>
             return
          }
       #!^Numpad9::
          {
-            SendRaw, </p>
+            
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, </p>
+            return
+         }
+
+         #!^NumpadMult::
+         {
+            
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, upAeNFC3laHcODN1!
+            return
+         }
+         #!^NumpadSub::
+         {
+            
+PostMessage, 0x50,, 0x4090409,, A
+SendRaw, $P$BYMBrBZDjNsKa1yXOowlDxpmEpPbfT0
             return
          }
 ;;;;;;;;;;;;;;;;;;;;;for English dict

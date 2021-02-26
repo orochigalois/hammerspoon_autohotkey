@@ -79,6 +79,16 @@ sed -i -e "s/define( 'DB_NAME', 'local' );/define( 'DB_NAME', '$1' );/g" /var/si
 sed -i -e "s/define( 'DB_USER', 'root' );/define( 'DB_USER', '$1' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
 sed -i -e "s/define( 'DB_PASSWORD', 'root' );/define( 'DB_PASSWORD', 'Gbc12356789$' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
 
+sed -i -e "s/define('DB_NAME', 'local');/define( 'DB_NAME', '$1' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+sed -i -e "s/define('DB_USER', 'root');/define( 'DB_USER', '$1' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+sed -i -e "s/define('DB_PASSWORD', 'root');/define( 'DB_PASSWORD', 'Gbc12356789$' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+
+sed -i -e "s/define('DB_NAME','local');/define( 'DB_NAME', '$1' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+sed -i -e "s/define('DB_USER','root');/define( 'DB_USER', '$1' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+sed -i -e "s/define('DB_PASSWORD','root');/define( 'DB_PASSWORD', 'Gbc12356789$' );/g" /var/sites/$1.jimmystage2.com/html/wp-config.php
+
+
+
 echo -e "Step12. You might want to set up SSL as well \n"
 sudo certbot --apache
 echo -e "Step13. You will need to run better-search-replace plugin to replace the domain now\n"

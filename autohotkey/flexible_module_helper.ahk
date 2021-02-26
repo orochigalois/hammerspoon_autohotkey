@@ -1,5 +1,5 @@
 ﻿;Must set Constant_Project_Theme_Folder beforehand
-Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\r3dresources\app\public\wp-content\themes\r3dresources"
+Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\sitandmove\app\public\wp-content\themes\sitandmove"
 ; Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\r3dresources\app\public\wp-content\themes\r3dresources"
 
 Constant_Flexible_Folder:= Constant_Project_Theme_Folder . "\partials\flexible\"
