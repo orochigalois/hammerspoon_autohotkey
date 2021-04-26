@@ -23,9 +23,10 @@ GetSelectedText() {
 
 3s=0003
 10s=0010
+10min=1010
 20min=2010
 
-total:=20min
+total:=10min
 
 ;_____prepare full screen black window
 CustomColor = AABBCC ; Can be any RGB color (it will be made transparent below).
@@ -74,6 +75,24 @@ return
    ; LAlt::LCtrl
    ; LWin::LAlt
    ; LCtrl::LWin
+
+
+;;;;;;;;;;;;;;;;;;;;;for English dict
+#!^-::
+   {
+
+      vSelected := GetSelectedText()
+      StringReplace, vSelected, vSelected, %A_SPACE%, `%20, All
+      Run chrome.exe https://www.vocabulary.com/dictionary/%vSelected%
+      return
+   }
+#!^0::
+   {
+      vSelected := GetSelectedText()
+      StringReplace, vSelected, vSelected, %A_SPACE%, `%20, All
+      Run chrome.exe https://translate.google.com/#en/zh-CN/%vSelected%
+      return
+   }
 
 ;;;;;;;;;;;;;;;;;;;;;for vscode
 #!^Numpad1::
@@ -200,31 +219,17 @@ SendRaw, </p>
          {
             
 PostMessage, 0x50,, 0x4090409,, A
-SendRaw, upAeNFC3laHcODN1!
+SendRaw, G4zbfMagmnDUZ
             return
          }
          #!^NumpadSub::
          {
             
 PostMessage, 0x50,, 0x4090409,, A
-SendRaw, $P$BYMBrBZDjNsKa1yXOowlDxpmEpPbfT0
+SendRaw, $P$Bf70LRBLdCdZj7T7YayBDoP.2zhWUK1
             return
          }
-;;;;;;;;;;;;;;;;;;;;;for English dict
-      #!^5::
-         {
-            Send, ^c
-            StringReplace, clipboard, clipboard, %A_SPACE%, `%20, All
-            Run chrome.exe https://www.vocabulary.com/dictionary/%clipboard%
-            return
-         }
-      #!^6::
-         {
-            Send, ^c
-            StringReplace, clipboard, clipboard, %A_SPACE%, `%20, All
-            Run chrome.exe https://translate.google.com/#en/zh-CN/%clipboard%
-            return
-         }
+
 
 ;;;;;;;;;;;;;;;;;;;;;delete
       ^Backspace::
