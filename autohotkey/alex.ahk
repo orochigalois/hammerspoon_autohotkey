@@ -78,7 +78,7 @@ return
 
 
 ;;;;;;;;;;;;;;;;;;;;;for English dict
-#!^-::
+#!^0::
    {
 
       vSelected := GetSelectedText()
@@ -86,11 +86,18 @@ return
       Run chrome.exe https://www.vocabulary.com/dictionary/%vSelected%
       return
    }
-#!^0::
+#!^-::
    {
       vSelected := GetSelectedText()
       StringReplace, vSelected, vSelected, %A_SPACE%, `%20, All
       Run chrome.exe https://translate.google.com/#en/zh-CN/%vSelected%
+      return
+   }
+#!^=::
+   {
+      vSelected := GetSelectedText()
+      StringReplace, vSelected, vSelected, %A_SPACE%, `%20, All
+      Run chrome.exe https://www.bing.com/images/search?q=%vSelected%
       return
    }
 
