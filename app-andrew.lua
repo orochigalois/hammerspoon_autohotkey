@@ -22,12 +22,18 @@ function show_on_screen(text)
         score_draw:setLevel(hs.drawing.windowLevels.overlay)
         score_draw:show()
         timer = hs.timer.doAfter(3, function()
-            score_draw:delete()
-            score_draw = nil
+            
+            if score_draw then
+                score_draw:delete()
+                score_draw = nil
+            end
         end)
     else
-        score_draw:delete()
-        score_draw = nil
+        
+        if score_draw then
+            score_draw:delete()
+            score_draw = nil
+        end
     end
 end
 
@@ -46,8 +52,11 @@ function show_total(text)
         score_draw:setLevel(hs.drawing.windowLevels.overlay)
         score_draw:show()
     else
-        score_draw:delete()
-        score_draw = nil
+        
+        if score_draw then
+            score_draw:delete()
+            score_draw = nil
+        end
     end
 end
 
@@ -67,7 +76,7 @@ end
 
 function upload_score()
     res_code, res_text, res_table = hs.http.doRequest(
-                                        'http://alexyin.net/andrew/upload.php?score=' .. score,
+                                        'https://alexyin.co/andrew/upload.php?score=' .. score,
                                         'GET')
     -- print(res_code)
     -- print(res_text)
@@ -76,10 +85,10 @@ end
 
 function download_score()
     res_code, res_text, res_table = hs.http.doRequest(
-                                        'http://alexyin.net/andrew/download.php',
+                                        'https://alexyin.co/andrew/download.php',
                                         'GET')
 
-    score = res_text
+    score = tonumber(res_text)
 end
 
 hs.hotkey.bind("0", "f12", function() score_add_one() end)
