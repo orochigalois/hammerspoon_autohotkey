@@ -1,5 +1,5 @@
 ﻿;Must set Constant_Project_Theme_Folder beforehand
-Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\awedwards\app\public\wp-content\themes\awedwards"
+Constant_Project_Theme_Folder := "C:\Users\alex\Jimmy\oddculture\app\public\wp-content\themes\oddculture"
 
 Constant_Options_File:= Constant_Project_Theme_Folder . "\acf-fields\options.acf.yaml"
 Constant_Header_PHP:= Constant_Project_Theme_Folder . "\header.php"

@@ -26,7 +26,7 @@ GetSelectedText() {
 10min=1010
 20min=2010
 
-total:=10min
+total:=20min
 
 ;_____prepare full screen black window
 CustomColor = AABBCC ; Can be any RGB color (it will be made transparent below).
@@ -102,6 +102,19 @@ return
    }
 
 ;;;;;;;;;;;;;;;;;;;;;for vscode
+NumpadAdd::
+   {
+      
+PostMessage, 0x50,, 0x4090409,, A
+
+      vSelected := GetSelectedText()
+      StringReplace, vSelected, vSelected, px, , All
+
+      Send rem(%vSelected%)
+
+      return
+
+   }
 #!^Numpad1::
    {
       
